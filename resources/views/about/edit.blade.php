@@ -1,49 +1,37 @@
-@extends('index')
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Data Tentang Kita</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formEditAbout" class="ajax-form" method="POST" enctype="multipart/form-data"
+                    data-modal-id="#editModal">
+                    @csrf
+                    @method('PUT') {{-- WAJIB: Laravel butuh ini untuk update --}}
 
-@section('title', 'Edit About')
+                    <div class="mb-3">
+                        <label class="form-label">Deskripsi</label>
+                        <textarea class="form-control" name="deskripsi" id="edit_deskripsi" rows="3"
+                            oninput="this.style.height='';this.style.height=this.scrollHeight+'px'" required></textarea>
+                    </div>
 
-@section('content')
-
-    <div class="page-heading">
-        <section id="content-types">
-            <div class="row">
-                <div class="col-xl-12 col-md-6 col-sm-12">
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="card-body">
-                                <form class="form" method="POST" action="{{ route('about.edit', $about->id) }}"
-                                    enctype="multipart/form-data">
-
-                                    @csrf
-                                    @method('POST')
-
-                                    <div class="form-body">
-                                        <div class="form-group">
-                                            <label for="deskripsi" class="sr-only">Deskripsi</label>
-                                            <textarea id="deskripsi" name="deskripsi" class="form-control" rows="5">{{ old('deskripsi', $about->deskripsi) }}</textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="gambar" class="sr-only">Gambar</label>
-                                            @if ($about->gambar)
-                                                <div>
-                                                    <img src="{{ url('storage/' . $about->gambar) }}" alt="Gambar"
-                                                        width="150" class="mb-3">
-                                                </div>
-                                            @endif
-                                            <input type="file" id="gambar" name="gambar" class="form-control">
-                                        </div>
-                                    </div>
-                                    <div class="form-actions d-flex justify-content-end">
-                                        <button type="submit" class="btn btn-primary">Update</button> &nbsp;
-                                        <a href="{{ route('about.index') }}" class="btn btn-secondary">Cancel</a>
-                                    </div>
-                                </form>
-                            </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ganti Gambar (Opsional)</label>
+                        <input type="file" class="form-control" name="gambar" id="edit_gambar">
+                        <div class="mt-2">
+                            <p class="small text-muted">Gambar saat ini:</p>
+                            <img id="edit_previewGambar" src="" style="max-width:100px; border-radius:6px;">
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
-    </div>
 
-@endsection
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

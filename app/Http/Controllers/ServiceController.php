@@ -6,7 +6,6 @@ use App\Models\Service;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Storage;
-use RealRashid\SweetAlert\Facades\Alert;
 
 class ServiceController extends Controller
 {
@@ -14,108 +13,113 @@ class ServiceController extends Controller
     {
         if ($request->ajax()) {
             $data = Service::all();
+            
             return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-
-                    $encodedId = base64_encode($row->id);
-
-                    return '<a href="' . route('service.edit', $encodedId) . '" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <form action="' . route('service.delete', $row->id) . '" method="POST" style="display:inline;">
-                    ' . csrf_field() . method_field('DELETE') . '
-                    <button type="submit" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                </form>';
+                ->addColumn('action', function($row){
+                    $btn = '<button type="button" onclick="editService(\''.$row->id.'\')" class="btn btn-primary btn-icon btn-xs">
+                <i class="mdi mdi-lead-pencil"></i>
+            </button> ';
+    
+                    $btn .= '<button type="button" onclick="deleteService(\''.$row->id.'\')" class="btn btn-danger btn-icon btn-xs">
+                                <i class="mdi mdi-delete"></i>
+            </button>';
+                    return $btn;
                 })
+                // --- TAMBAHKAN BAGIAN GAMBAR DI SINI ---
+                ->editColumn('gambar', function($row){
+                    if ($row->gambar) {
+                        $url = asset('storage/' . $row->gambar);
+                        // Tambahin onclick buat panggil fungsi JS
+                        return '<img src="'.$url.'" class="rounded shadow-sm" width="50" height="50" 
+                                style="object-fit: cover; cursor: pointer;" 
+                                onclick="showGambar(\''.$url.'\')">';
+                    }
+                    return '<small class="text-muted">No Image</small>';
+                })
+                // JANGAN LUPA: Tambahkan 'gambar' di dalam array rawColumns
+                ->rawColumns(['action', 'gambar'])
+
                 ->make(true);
         }
 
         return view('service.index');
     }
 
-    public function add(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'judul' => 'required',
             'deskripsi' => 'required',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        $gambarPath = null;
         if ($request->hasFile('gambar')) {
-            $gambarPath = $request->file('gambar')->store('gambar', 'public');
-            $gambarPath = str_replace('public/', 'storage/', $gambarPath);
+            $validated['gambar'] = $request->file('gambar')->store('service', 'public');
         }
 
-        try {
-            Service::create([
-                'judul' => $request->judul,
-                'deskripsi' => $request->deskripsi,
-                'gambar' => $gambarPath,
-            ]);
+        $alat = Service::create($validated);
 
-            Alert::success('Berhasil!', 'Tambah data berhasil!');
-        } catch (\Exception $e) {
-            Alert::error('Gagal!', 'Tambah data gagal.');
-        }
-
-        return redirect()->route('service.index');
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Service berhasil ditambahkan!'
+        ]);
     }
 
-    public function edit(Request $request, $encoded_id)
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
     {
-        $id = base64_decode($encoded_id);
-
         $service = Service::findOrFail($id);
-
-        if ($request->isMethod('post')) {
-            $request->validate([
-                'judul' => 'required',
-                'deskripsi' => 'required',
-                'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
-
-            $gambarPath = $service->gambar;
-
-            if ($request->hasFile('gambar')) {
-                $gambarPath = $request->file('gambar')->store('gambar', 'public');
-                $gambarPath = str_replace('public/', 'storage/', $gambarPath);
-            }
-
-            try {
-                $service->update([
-                    'judul' => $request->judul,
-                    'deskripsi' => $request->deskripsi,
-                    'gambar' => $gambarPath,
-                ]);
-
-                Alert::success('Berhasil!', 'Edit data berhasil!');
-            } catch (\Exception $e) {
-                Alert::error('Gagal!', 'Edit data gagal.');
-            }
-
-            return redirect()->route('service.index');
-        }
-
-        return view('service.edit', compact('service'));
+        return response()->json([
+            'service' => $service
+        ]);  // Balikin data dalam bentuk JSON
     }
 
+    public function update(Request $request, $id)
+    {
+        // Cari datanya dulu
+        $service = Service::findOrFail($id);
+        
+        $validated = $request->validate([
+            // Tambahkan .$id di akhir validasi unique
+            'judul' => 'required|unique:services,judul,' . $id,
+            'deskripsi' => 'required',
+            'gambar'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
+
+        if ($request->hasFile('gambar')) {
+            
+            $validated['gambar'] = $request->file('gambar')->store('service', 'public');
+        }
+
+        $service->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Service berhasil diupdate!'
+        ]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
         $service = Service::findOrFail($id);
 
+        // 1. Cek kalau ada gambar, hapus dari storage
         if ($service->gambar) {
-            $gambarPath = str_replace('storage/', 'public/', $service->gambar);
-            Storage::delete($gambarPath);
+            Storage::disk('public')->delete($service->gambar);
         }
 
-        try {
-            Service::destroy($id);
+        // 2. Hapus data dari database
+        $service->delete();
 
-            Alert::success('Berhasil!', 'Hapus data berhasil!');
-        } catch (\Exception $e) {
-            Alert::error('Gagal!', 'Hapus data gagal!');
-        }
-        return redirect()->route('service.index');
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Service dan fotonya berhasil dihapus!'
+        ]);
     }
 
 }

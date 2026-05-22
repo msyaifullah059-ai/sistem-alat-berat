@@ -24,7 +24,7 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="jenis_pekerjaan" class="form-label">Alat Berat</label>
+                        <label for="jenis_pekerjaan" class="form-label">Jenis Pekerjaan</label>
                         <select class="form-select" aria-label="Default select example" id="jenis_pekerjaan"
                             name="jenis_pekerjaan">
                             <option value="">-- Jenis Pekerjaan --</option>

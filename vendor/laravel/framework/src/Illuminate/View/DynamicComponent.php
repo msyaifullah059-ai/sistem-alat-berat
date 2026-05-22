@@ -151,7 +151,7 @@ EOF;
      */
     protected function bindings(string $class)
     {
-        [$data] = $this->compiler()->partitionDataAndAttributes($class, $this->attributes->getAttributes());
+        [$data, $attributes] = $this->compiler()->partitionDataAndAttributes($class, $this->attributes->getAttributes());
 
         return array_keys($data->all());
     }

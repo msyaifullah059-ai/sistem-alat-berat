@@ -71,7 +71,8 @@ class TransaksiSewa extends Model
 
     public function dpPembayaran()
     {
-        return $this->hasMany(DpPembayaran::class, 'transaksi_sewa_id');
+        // Hubungannya: Transaksi ini MEMILIKI SATU DP Pembayaran
+        return $this->hasOne(DpPembayaran::class, 'transaksi_sewa_id');
     }
 
     public function hmLogs()

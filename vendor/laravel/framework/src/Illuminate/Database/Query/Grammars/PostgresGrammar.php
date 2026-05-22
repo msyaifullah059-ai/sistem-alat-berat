@@ -167,12 +167,8 @@ class PostgresGrammar extends Grammar
             $language = 'english';
         }
 
-        $isVector = $where['options']['vector'] ?? false;
-
         $columns = (new Collection($where['columns']))
-            ->map(fn ($column) => $isVector
-                ? $this->wrap($column)
-                : "to_tsvector('{$language}', {$this->wrap($column)})")
+            ->map(fn ($column) => "to_tsvector('{$language}', {$this->wrap($column)})")
             ->implode(' || ');
 
         $mode = 'plainto_tsquery';
@@ -183,10 +179,6 @@ class PostgresGrammar extends Grammar
 
         if (($where['options']['mode'] ?? []) === 'websearch') {
             $mode = 'websearch_to_tsquery';
-        }
-
-        if (($where['options']['mode'] ?? []) === 'raw') {
-            $mode = 'to_tsquery';
         }
 
         return "({$columns}) @@ {$mode}('{$language}', {$this->parameter($where['value'])})";

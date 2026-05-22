@@ -51,7 +51,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
             </div>

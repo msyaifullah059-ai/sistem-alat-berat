@@ -59,10 +59,6 @@ trait TestDatabases
 
                     $this->switchToDatabase($testDatabase);
 
-                    if ($created) {
-                        ParallelTesting::callSetUpTestDatabaseBeforeMigratingCallbacks($testDatabase);
-                    }
-
                     if (isset($uses[Testing\DatabaseTransactions::class])) {
                         $this->ensureSchemaIsUpToDate();
                     }

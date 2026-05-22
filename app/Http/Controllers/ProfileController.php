@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\About;
 use App\Models\Service;
-use App\Models\Alat;
+use App\Models\AlatBerat;
 use Illuminate\Http\Request;
 
 class ProfileController extends Controller

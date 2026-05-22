@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('no_hp')->nullable();
             $table->text('alamat')->nullable();
-            $table->string('gambar')->nullable();
+            $table->string('ktp')->nullable();
             $table->timestamps();
         });
     }

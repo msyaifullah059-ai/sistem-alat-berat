@@ -9,8 +9,8 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="btn-close"></button>
             </div>
             <div class="modal-body">
-                <form id="formTambah" class="forms-sample ajax-form" action="{{ route('operator.store') }}" method="POST"
-                    enctype="multipart/form-data" data-modal-id="#createModal">
+                <form id="formTambah" class="forms-sample ajax-form" action="{{ route('operator.store') }}"
+                    method="POST" enctype="multipart/form-data" data-modal-id="#createModal">
                     @csrf
 
                     <div class="mb-3">
@@ -20,8 +20,10 @@
                     </div>
                     <div class="mb-3">
                         <label for="no_hp" class="form-label">Kontak</label>
-                        <input type="number" class="form-control" id="no_hp" name="no_hp" placeholder="Kontak"
-                            required />
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">+62</span>
+                            <input type="number" class="form-control" id="no_hp" name="no_hp" required />
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="alamat" class="form-label">Alamat</label>

@@ -320,11 +320,15 @@
         </table>
     </div>
 
+    @php
+        $user = auth()->user();
+    @endphp
+
     <div class="footer-sig clearfix">
         <div class="sig-col">
             <div class="label">Finance Manager,</div>
             <div class="sig-line"></div>
-            <div class="sig-name">Shany Sasnita Andriani</div>
+            <div class="sig-name">{{ $user->name }}</div>
             <div style="font-size: 9px; color: #64748b; font-weight: 400; margin-top: 2px;">CV. Lisan - Head Office
             </div>
         </div>

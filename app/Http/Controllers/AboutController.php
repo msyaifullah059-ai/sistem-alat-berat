@@ -6,131 +6,112 @@ use App\Models\About;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Storage;
-use RealRashid\SweetAlert\Facades\Alert;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\AboutImport;
 
 class AboutController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = About::all();
+            $data = About::query(); 
+            
             return DataTables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-
-                    $encodedId = base64_encode($row->id);
-
-                    return '<a href="' . route('about.edit', $encodedId) . '" class="btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i></a>
-                <form action="' . route('about.delete', $row->id) . '" method="POST" style="display:inline;">
-                    ' . csrf_field() . method_field('DELETE') . '
-                    <button type="submit" class="btn btn-danger"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                </form>';
+                ->addColumn('action', function($row){
+                    $btn = '<button type="button" onclick="editAbout(\''.$row->id.'\')" class="btn btn-primary btn-icon btn-xs">
+                <i class="mdi mdi-lead-pencil"></i>
+            </button> ';
+    
+                    $btn .= '<button type="button" onclick="deleteAbout(\''.$row->id.'\')" class="btn btn-danger btn-icon btn-xs">
+                                <i class="mdi mdi-delete"></i>
+            </button>';
+                    return $btn;
                 })
+                // --- TAMBAHKAN BAGIAN GAMBAR DI SINI ---
+                ->editColumn('gambar', function($row){
+                    if ($row->gambar) {
+                        $url = asset('storage/' . $row->gambar);
+                        // Tambahin onclick buat panggil fungsi JS
+                        return '<img src="'.$url.'" class="rounded shadow-sm" width="50" height="50" 
+                                style="object-fit: cover; cursor: pointer;" 
+                                onclick="showGambar(\''.$url.'\')">';
+                    }
+                    return '<small class="text-muted">No Image</small>';
+                })
+                // JANGAN LUPA: Tambahkan 'gambar' di dalam array rawColumns
+                ->rawColumns(['action', 'gambar']) 
                 ->make(true);
         }
 
         return view('about.index');
     }
 
-    public function add(Request $request)
+    public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'deskripsi' => 'required',
-            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'gambar'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        $gambarPath = null;
         if ($request->hasFile('gambar')) {
-            $gambarPath = $request->file('gambar')->store('gambar', 'public');
-            $gambarPath = str_replace('public/', 'storage/', $gambarPath);
+            $validated['gambar'] = $request->file('gambar')->store('about', 'public');
         }
 
-        try {
-            About::create([
-                'deskripsi' => $request->deskripsi,
-                'gambar' => $gambarPath,
-            ]);
+        $about = About::create($validated);
 
-            Alert::success('Berhasil!', 'Tambah data berhasil!');
-        } catch (\Exception $e) {
-            Alert::error('Gagal!', 'Tambah data gagal.');
-        }
-
-        return redirect()->route('about.index');
+        return response()->json([
+            'success' => true,
+            'message' => 'Data tentang kita berhasil ditambahkan!'
+        ]);
     }
 
-    public function edit(Request $request, $encoded_id)
+    public function edit($id)
     {
-        $id = base64_decode($encoded_id);
-
         $about = About::findOrFail($id);
+        return response()->json([
+            'about' => $about
+        ]);  // Balikin data dalam bentuk JSON
+    }
 
-        if ($request->isMethod('post')) {
-            $request->validate([
-                'deskripsi' => 'required',
-                'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
+    public function update(Request $request, $id)
+    {
+        // Cari datanya dulu
+        $about = About::findOrFail($id);
+        
+        $validated = $request->validate([
+            // Tambahkan .$id di akhir validasi unique
+            'deskripsi' => 'required|unique:abouts,deskripsi,' . $id,
+            'gambar'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+        ]);
 
-            $gambarPath = $about->gambar;
-
-            if ($request->hasFile('gambar')) {
-                $gambarPath = $request->file('gambar')->store('gambar', 'public');
-                $gambarPath = str_replace('public/', 'storage/', $gambarPath);
-            }
-
-            try {
-                $about->update([
-                    'deskripsi' => $request->deskripsi,
-                    'gambar' => $gambarPath,
-                ]);
-
-                Alert::success('Berhasil!', 'Edit data berhasil!');
-            } catch (\Exception $e) {
-                Alert::error('Gagal!', 'Edit data gagal.');
-            }
-
-            return redirect()->route('about.index');
+        if ($request->hasFile('gambar')) {
+            // Opsi: Hapus gambar lama kalau mau hemat storage
+            // if($alat->gambar) Storage::disk('public')->delete($alat->gambar);
+            
+            $validated['gambar'] = $request->file('gambar')->store('about', 'public');
         }
 
-        return view('about.edit', compact('about'));
+        $about->update($validated);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data tentang kita berhasil diupdate!'
+        ]);
     }
 
     public function destroy($id)
     {
         $about = About::findOrFail($id);
 
+        // 1. Cek kalau ada gambar, hapus dari storage
         if ($about->gambar) {
-            $gambarPath = str_replace('storage/', 'public/', $about->gambar);
-            Storage::delete($gambarPath);
+            Storage::disk('public')->delete($about->gambar);
         }
 
-        try {
-            About::destroy($id);
+        // 2. Hapus data dari database
+        $about->delete();
 
-            Alert::success('Berhasil!', 'Hapus data berhasil!');
-        } catch (\Exception $e) {
-            Alert::error('Gagal!', 'Hapus data gagal!');
-        }
-
-        return redirect()->route('about.index');
-    }
-
-    public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,csv',
+        return response()->json([
+            'success' => true,
+            'message' => 'Data tentang kita dan fotonya berhasil dihapus!'
         ]);
-
-        try {
-            Excel::import(new AboutImport, $request->file('file'));
-
-            Alert::success('Berhasil!', 'Data berhasil diimpor!');
-        } catch (\Exception $e) {
-            Alert::error('Gagal!', 'Terjadi kesalahan saat mengimpor data.');
-        }
-
-        return redirect()->route('about.index');
     }
 }

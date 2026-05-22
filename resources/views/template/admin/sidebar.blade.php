@@ -41,11 +41,17 @@
                     <span class="link-title">Harga Sewa</span>
                 </a>
             </li>
-            <li class="nav-item nav-category">Operasional</li>
+            <li class="nav-item nav-category">Transaksi</li>
             <li class="nav-item">
                 <a href="transaksi" class="nav-link">
                     <i class="link-icon" data-lucide="credit-card"></i>
-                    <span class="link-title">Transaksi Sewa</span>
+                    <span class="link-title">Penyewaan</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="dp_pembayaran" class="nav-link">
+                    <i class="link-icon" data-lucide="dollar-sign"></i>
+                    <span class="link-title">Pembayaran</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -60,11 +66,23 @@
                     <span class="link-title">Log HM</span>
                 </a>
             </li> --}}
-            <li class="nav-item nav-category">Keuangan</li>
+            <li class="nav-item nav-category">Manajemen</li>
             <li class="nav-item">
-                <a href="dp_pembayaran" class="nav-link">
-                    <i class="link-icon" data-lucide="dollar-sign"></i>
-                    <span class="link-title">Pembayaran Sewa</span>
+                <a href="service" class="nav-link">
+                    <i class="link-icon" data-lucide="clipboard"></i>
+                    <span class="link-title">Layanan</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="about" class="nav-link">
+                    <i class="link-icon" data-lucide="book-open"></i>
+                    <span class="link-title">Tentang Kami</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="users" class="nav-link">
+                    <i class="link-icon" data-lucide="monitor"></i>
+                    <span class="link-title">Manajemen User</span>
                 </a>
             </li>
         </ul>

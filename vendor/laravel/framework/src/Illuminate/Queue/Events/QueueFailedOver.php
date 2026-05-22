@@ -9,9 +9,8 @@ class QueueFailedOver
     /**
      * Create a new event instance.
      *
-     * @param  string|null  $connectionName  The queue connection that failed.
-     * @param  \Closure|string|object  $command  The job instance.
-     * @param  \Throwable  $exception  The exception that was thrown.
+     * @param  string  $connectionName  The queue connection that failed.
+     * @param  \Closure|string|object  $job  The job instance.
      */
     public function __construct(
         public ?string $connectionName,

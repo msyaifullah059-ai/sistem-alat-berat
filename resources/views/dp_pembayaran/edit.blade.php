@@ -30,8 +30,10 @@
                     </div>
                     <div class="mb-3">
                         <label for="edit_jumlah" class="form-label">Jumlah</label>
-                        <input type="number" class="form-control" id="edit_jumlah" name="jumlah" placeholder="Jumlah"
-                            required />
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">Rp</span>
+                            <input type="number" class="form-control" id="edit_jumlah" name="jumlah" required />
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="edit_keterangan" class="form-label">Keterangan</label>

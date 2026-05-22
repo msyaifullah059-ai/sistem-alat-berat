@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Foundation\Mix;
 use Illuminate\Foundation\Vite;
 use Illuminate\Support\Defer\DeferredCallbackCollection;
-use Illuminate\Support\Facades\Vite as ViteFacade;
+use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\HtmlString;
 use Mockery;
 
@@ -66,11 +66,9 @@ trait InteractsWithContainer
     /**
      * Mock an instance of an object in the container.
      *
-     * @template TInstance of object
-     *
-     * @param  class-string<TInstance>  $abstract
+     * @param  string  $abstract
      * @param  \Closure|null  $mock
-     * @return TInstance&\Mockery\MockInterface
+     * @return \Mockery\MockInterface
      */
     protected function mock($abstract, ?Closure $mock = null)
     {
@@ -125,7 +123,7 @@ trait InteractsWithContainer
             $this->originalVite = app(Vite::class);
         }
 
-        ViteFacade::clearResolvedInstance();
+        Facade::clearResolvedInstance(Vite::class);
 
         $this->swap(Vite::class, new class extends Vite
         {

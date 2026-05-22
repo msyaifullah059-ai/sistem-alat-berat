@@ -15,7 +15,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex flex-row align-items-center justify-content-between border-bottom small mb-3">
-                        <h6 class="card-title">Data Pelanggan</h6>
+                        <h6 class="card-title">Data Harga Sewa</h6>
                         <button type="button" class="btn btn-primary btn-icon-text btn-xs mb-3" data-bs-toggle="modal"
                             data-bs-target="#createModal">
                             <i class="btn-icon-prepend" data-lucide="plus-circle"></i>

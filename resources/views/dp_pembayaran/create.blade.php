@@ -32,13 +32,15 @@
                     </div>
                     <div class="mb-3">
                         <label for="jumlah" class="form-label">Jumlah</label>
-                        <input type="number" class="form-control" id="jumlah" name="jumlah" placeholder="Jumlah"
-                            required />
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">Rp</span>
+                            <input type="number" class="form-control" id="jumlah" name="jumlah" required />
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="keterangan" class="form-label">Keterangan</label>
-                        <input type="text" class="form-control" id="keterangan" name="keterangan" placeholder="Keterangan"
-                            required />
+                        <input type="text" class="form-control" id="keterangan" name="keterangan"
+                            placeholder="Keterangan" required />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal">

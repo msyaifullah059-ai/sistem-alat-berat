@@ -32,14 +32,20 @@
 
                     <div class="mb-3">
                         <label for="edit_harga_per_hari" class="form-label">Harga Sewa/Hari</label>
-                        <input type="number" class="form-control" id="edit_harga_per_hari" name="harga_per_hari"
-                            required />
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">Rp</span>
+                            <input type="number" class="form-control" id="edit_harga_per_hari" name="harga_per_hari"
+                                required />
+                        </div>
                     </div>
 
                     <div class="mb-3">
-                        <label for="edit_harga_per_jam" class="form-label">Harga Sewa/Jam</label>
-                        <input type="number" class="form-control" id="edit_harga_per_jam" name="harga_per_jam"
-                            required />
+                        <label for="edit_harga_per_jam" class="form-label">Harga Sewa/Hari</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">Rp</span>
+                            <input type="number" class="form-control" id="edit_harga_per_jam" name="harga_per_jam"
+                                required />
+                        </div>
                     </div>
 
                     <div class="mb-3">
@@ -55,7 +61,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-xs">Simpan Perubahan</button>
+                        <button type="submit" class="btn btn-primary btn-xs">Simpan</button>
                     </div>
                 </form>
             </div>

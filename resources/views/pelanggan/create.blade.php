@@ -20,8 +20,10 @@
                     </div>
                     <div class="mb-3">
                         <label for="no_hp" class="form-label">Kontak</label>
-                        <input type="number" class="form-control" id="no_hp" name="no_hp" placeholder="Kontak"
-                            required />
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">+62</span>
+                            <input type="number" class="form-control" id="no_hp" name="no_hp" required />
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="alamat" class="form-label">Alamat</label>

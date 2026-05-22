@@ -3,8 +3,7 @@
         <div class="row align-items-center position-relative">
             <div class="col-3">
                 <div class="site-logo">
-                    <a href="index.html"><strong>Shany</strong>Andri
-                        <span class="text-primary">.</span>
+                    <a href="index.html"><span class="text-primary">CV.</span><strong>Lisan</strong>
                     </a>
                 </div>
             </div>
@@ -21,13 +20,13 @@
                         <li class="active">
                             <a href="#home" class="nav-link">Home</a>
                         </li>
-                        <li><a href="#about" class="nav-link">About</a></li>
-                        <li><a href="#service" class="nav-link">Services</a></li>
-                        <li><a href="#tools" class="nav-link">Tools</a></li>
+                        <li><a href="#about" class="nav-link">Tentang</a></li>
+                        <li><a href="#service" class="nav-link">Layanan</a></li>
+                        <li><a href="#tools" class="nav-link">Alat</a></li>
                         <li>
                             <a href="login" class="nav-link">
                                 <button type="button" class="btn btn-primary">
-                                    Login
+                                    Masuk
                                 </button>
                             </a>
                         </li>

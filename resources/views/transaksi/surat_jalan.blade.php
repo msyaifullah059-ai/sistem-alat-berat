@@ -296,11 +296,15 @@
         </div>
     </div>
 
+    @php
+        $user = auth()->user();
+    @endphp
+
     <div class="footer-sig clearfix">
         <div class="sig-col">
             <div class="label">Admin Logistic</div>
             <div class="sig-line"></div>
-            <div class="sig-name">( Shany Sasnita A. )</div>
+            <div class="sig-name">( {{ $user->name }} )</div>
         </div>
         <div class="sig-col">
             <div class="label">Operator Lapangan</div>

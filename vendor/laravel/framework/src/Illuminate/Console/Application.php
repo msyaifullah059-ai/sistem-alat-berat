@@ -55,7 +55,7 @@ class Application extends SymfonyApplication implements ApplicationContract
     /**
      * A map of command names to classes.
      *
-     * @var array<string, \Illuminate\Console\Command|string>
+     * @var array
      */
     protected $commandMap = [];
 
@@ -172,7 +172,7 @@ class Application extends SymfonyApplication implements ApplicationContract
      *
      * @param  \Symfony\Component\Console\Command\Command|string  $command
      * @param  array  $parameters
-     * @return array<string, \Symfony\Component\Console\Input\ArrayInput>
+     * @return array
      */
     protected function parseCommand($command, $parameters)
     {
@@ -259,6 +259,7 @@ class Application extends SymfonyApplication implements ApplicationContract
     protected function addToParent(SymfonyCommand $command)
     {
         if (method_exists(SymfonyApplication::class, 'addCommand')) {
+            /** @phpstan-ignore staticMethod.notFound */
             return parent::addCommand($command);
         }
 

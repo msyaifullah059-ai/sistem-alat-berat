@@ -24,9 +24,7 @@ final class CallbackOutputTest extends TestCase
         $buf = '';
         $zip = new ZipStream(
             outputStream: CallbackStreamWrapper::open(
-                static function (string $chunk) use (&$buf): void {
-                    $buf .= $chunk;
-                }
+                static function (string $chunk) use (&$buf): void { $buf .= $chunk; }
             ),
             sendHttpHeaders: false
         );
@@ -55,14 +53,10 @@ final class CallbackOutputTest extends TestCase
         $buf2 = '';
 
         $stream1 = CallbackStreamWrapper::open(
-            static function (string $chunk) use (&$buf1): void {
-                $buf1 .= $chunk;
-            }
+            static function (string $chunk) use (&$buf1): void { $buf1 .= $chunk; }
         );
         $stream2 = CallbackStreamWrapper::open(
-            static function (string $chunk) use (&$buf2): void {
-                $buf2 .= $chunk;
-            }
+            static function (string $chunk) use (&$buf2): void { $buf2 .= $chunk; }
         );
 
         $this->assertIsResource($stream1);
@@ -118,8 +112,7 @@ final class CallbackOutputTest extends TestCase
     public function testStreamPositionTracking(): void
     {
         $stream = CallbackStreamWrapper::open(
-            static function (string $chunk): void { // no-op
-            }
+            static function (string $chunk): void { /* no-op */ }
         );
 
         $this->assertSame(0, ftell($stream));
@@ -136,8 +129,7 @@ final class CallbackOutputTest extends TestCase
     public function testInvalidModeRejection(): void
     {
         $stream = CallbackStreamWrapper::open(
-            static function (string $chunk): void { // no-op
-            }
+            static function (string $chunk): void { /* no-op */ }
         );
 
         // Close the stream first
@@ -151,8 +143,7 @@ final class CallbackOutputTest extends TestCase
     public function testStreamStatistics(): void
     {
         $stream = CallbackStreamWrapper::open(
-            static function (string $chunk): void { // no-op
-            }
+            static function (string $chunk): void { /* no-op */ }
         );
 
         fwrite($stream, 'test data');

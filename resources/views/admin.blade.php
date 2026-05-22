@@ -15,19 +15,28 @@
 
 <body>
 
-    <div class="main-wrapper">
-        @include('template/admin/sidebar')
+    @auth
+        <div class="main-wrapper">
 
-        <div class="page-wrapper">
-            @include('template/admin/navbar')
+            @include('template.admin.sidebar')
 
-            <div class="page-content container-xxl">
-                @yield('content')
+            <div class="page-wrapper">
+
+                @include('template.admin.navbar')
+
+                <div class="page-content container-xxl">
+                    @yield('content')
+                </div>
+
+                @include('template.admin.footer')
+
             </div>
-
-            @include('template/admin/footer')
         </div>
-    </div>
+    @endauth
+
+    @guest
+        @yield('content')
+    @endguest
 
     @include('template/assets/admin/default/footer')
     @include('template/assets/admin/table/footer')
@@ -120,6 +129,7 @@
     </script>
 
     @yield('scripts')
+    @stack('scripts')
 
 </body>
 

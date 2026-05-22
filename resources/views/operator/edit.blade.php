@@ -16,8 +16,11 @@
                         <input type="text" class="form-control" name="nama" id="edit_nama" required>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Kontak</label>
-                        <input type="number" class="form-control" name="no_hp" id="edit_no_hp" required>
+                        <label for="edit_no_hp" class="form-label">Kontak</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-light text-muted">+62</span>
+                            <input type="number" class="form-control" id="edit_no_hp" name="no_hp" required />
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Alamat</label>
@@ -34,7 +37,7 @@
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                        <button type="submit" class="btn btn-primary">Simpan</button>
                     </div>
                 </form>
             </div>

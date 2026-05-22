@@ -16,7 +16,6 @@ user, which is much faster. It can work with S3 buckets or any PSR7 Stream.
    Nginx
    Varnish
    ContentLength
-   LargeFilesToS3
 
 Installation
 ---------------

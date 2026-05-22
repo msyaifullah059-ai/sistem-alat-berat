@@ -65,7 +65,7 @@ use Symfony\Contracts\Service\ResetInterface;
  * Usage:
  *
  *     $app = new Application('myapp', '1.0 (stable)');
- *     $app->addCommand(new SimpleCommand());
+ *     $app->add(new SimpleCommand());
  *     $app->run();
  *
  * @author Fabien Potencier <fabien@symfony.com>
@@ -389,7 +389,10 @@ class Application implements ResetInterface
         $this->definition ??= $this->getDefaultInputDefinition();
 
         if ($this->singleCommand) {
-            $this->definition->setArguments();
+            $inputDefinition = $this->definition;
+            $inputDefinition->setArguments();
+
+            return $inputDefinition;
         }
 
         return $this->definition;
@@ -420,15 +423,6 @@ class Application implements ResetInterface
 
         if (CompletionInput::TYPE_OPTION_NAME === $input->getCompletionType()) {
             $suggestions->suggestOptions($this->getDefinition()->getOptions());
-        }
-
-        if (
-            CompletionInput::TYPE_OPTION_VALUE === $input->getCompletionType()
-            && ($definition = $this->getDefinition())->hasOption($input->getCompletionName())
-        ) {
-            $definition->getOption($input->getCompletionName())->complete($input, $suggestions);
-
-            return;
         }
     }
 
@@ -533,7 +527,7 @@ class Application implements ResetInterface
      */
     public function register(string $name): Command
     {
-        return $this->addCommand(new Command($name));
+        return $this->add(new Command($name));
     }
 
     /**
@@ -541,23 +535,13 @@ class Application implements ResetInterface
      *
      * If a Command is not enabled it will not be added.
      *
-     * @param callable[]|Command[] $commands An array of commands
+     * @param Command[] $commands An array of commands
      */
     public function addCommands(array $commands): void
     {
         foreach ($commands as $command) {
-            $this->addCommand($command);
+            $this->add($command);
         }
-    }
-
-    /**
-     * @deprecated since Symfony 7.4, use Application::addCommand() instead
-     */
-    public function add(Command $command): ?Command
-    {
-        trigger_deprecation('symfony/console', '7.4', 'The "%s()" method is deprecated and will be removed in Symfony 8.0, use "%s::addCommand()" instead.', __METHOD__, self::class);
-
-        return $this->addCommand($command);
     }
 
     /**
@@ -566,13 +550,9 @@ class Application implements ResetInterface
      * If a command with the same name already exists, it will be overridden.
      * If the command is not enabled it will not be added.
      */
-    public function addCommand(callable|Command $command): ?Command
+    public function add(Command $command): ?Command
     {
         $this->init();
-
-        if (!$command instanceof Command) {
-            $command = new Command(null, $command);
-        }
 
         $command->setApplication($this);
 
@@ -639,7 +619,7 @@ class Application implements ResetInterface
     {
         $this->init();
 
-        return isset($this->commands[$name]) || ($this->commandLoader?->has($name) && $this->addCommand($this->commandLoader->get($name)));
+        return isset($this->commands[$name]) || ($this->commandLoader?->has($name) && $this->add($this->commandLoader->get($name)));
     }
 
     /**
@@ -746,14 +726,15 @@ class Application implements ResetInterface
             $message = \sprintf('Command "%s" is not defined.', $name);
 
             if ($alternatives = $this->findAlternatives($name, $allCommands)) {
-                $wantHelps = $this->wantHelps;
-                $this->wantHelps = false;
-
                 // remove hidden commands
-                if ($alternatives = array_filter($alternatives, fn ($name) => !$this->get($name)->isHidden())) {
-                    $message .= \sprintf("\n\nDid you mean %s?\n    %s", 1 === \count($alternatives) ? 'this' : 'one of these', implode("\n    ", $alternatives));
+                $alternatives = array_filter($alternatives, fn ($name) => !$this->get($name)->isHidden());
+
+                if (1 == \count($alternatives)) {
+                    $message .= "\n\nDid you mean this?\n    ";
+                } else {
+                    $message .= "\n\nDid you mean one of these?\n    ";
                 }
-                $this->wantHelps = $wantHelps;
+                $message .= implode("\n    ", $alternatives);
             }
 
             throw new CommandNotFoundException($message, array_values($alternatives));
@@ -773,21 +754,6 @@ class Application implements ResetInterface
 
                 return $commandName === $nameOrAlias || !\in_array($commandName, $commands, true);
             }));
-        }
-
-        // check whether all commands left are aliases to the same one
-        if (\count($commands) > 1) {
-            $uniqueCommands = array_unique(array_map(function ($nameOrAlias) use (&$commandList) {
-                if (!$commandList[$nameOrAlias] instanceof Command) {
-                    $commandList[$nameOrAlias] = $this->commandLoader->get($nameOrAlias);
-                }
-
-                return $commandList[$nameOrAlias]->getName();
-            }, $commands));
-
-            if (1 === \count($uniqueCommands)) {
-                $commands = [reset($uniqueCommands)];
-            }
         }
 
         if (\count($commands) > 1) {
@@ -816,9 +782,9 @@ class Application implements ResetInterface
             }
         }
 
-        $command = $commands ? $this->get(reset($commands)) : null;
+        $command = $this->get(reset($commands));
 
-        if (!$command || $command->isHidden()) {
+        if ($command->isHidden()) {
             throw new CommandNotFoundException(\sprintf('The command "%s" does not exist.', $name));
         }
 
@@ -1027,12 +993,8 @@ class Application implements ResetInterface
             }
         }
 
-        $registeredSignals = false;
         if (($commandSignals = $command->getSubscribedSignals()) || $this->dispatcher && $this->signalsToDispatchEvent) {
             $signalRegistry = $this->getSignalRegistry();
-
-            $registeredSignals = true;
-            $this->getSignalRegistry()->pushCurrentHandlers();
 
             if ($this->dispatcher) {
                 // We register application signals, so that we can dispatch the event
@@ -1090,13 +1052,7 @@ class Application implements ResetInterface
         }
 
         if (null === $this->dispatcher) {
-            try {
-                return $command->run($input, $output);
-            } finally {
-                if ($registeredSignals) {
-                    $this->getSignalRegistry()->popPreviousHandlers();
-                }
-            }
+            return $command->run($input, $output);
         }
 
         // bind before the console.command event, so the listeners have access to input options/arguments
@@ -1125,10 +1081,6 @@ class Application implements ResetInterface
 
             if (0 === $exitCode = $event->getExitCode()) {
                 $e = null;
-            }
-        } finally {
-            if ($registeredSignals) {
-                $this->getSignalRegistry()->popPreviousHandlers();
             }
         }
 
@@ -1350,14 +1302,8 @@ class Application implements ResetInterface
         }
         $this->initialized = true;
 
-        if ((new \ReflectionMethod($this, 'add'))->getDeclaringClass()->getName() !== (new \ReflectionMethod($this, 'addCommand'))->getDeclaringClass()->getName()) {
-            $adder = $this->add(...);
-        } else {
-            $adder = $this->addCommand(...);
-        }
-
         foreach ($this->getDefaultCommands() as $command) {
-            $adder($command);
+            $this->add($command);
         }
     }
 }
