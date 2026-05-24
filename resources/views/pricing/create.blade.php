@@ -24,29 +24,76 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="jenis_pekerjaan" class="form-label">Jenis Pekerjaan</label>
-                        <select class="form-select" aria-label="Default select example" id="jenis_pekerjaan"
-                            name="jenis_pekerjaan">
-                            <option value="">-- Jenis Pekerjaan --</option>
-                            <option value="baket">Baket</option>
-                            <option value="breker">Breker</option>
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="harga_per_hari" class="form-label">Harga sewa/Hari</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light text-muted">Rp</span>
-                            <input type="number" class="form-control" id="harga_per_hari" name="harga_per_hari"
-                                placeholder="0" required />
-                        </div>
-                    </div>
+                        <label class="form-label fw-bold">Jenis Pekerjaan</label>
 
-                    <div class="mb-3">
-                        <label for="harga_per_jam" class="form-label">Harga sewa/Jam</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light text-muted">Rp</span>
-                            <input type="number" class="form-control" id="harga_per_jam" name="harga_per_jam"
-                                placeholder="0" required />
+                        <!-- BAKET -->
+                        <div class="form-check mb-2">
+                            <input class="form-check-input pekerjaan-checkbox" type="checkbox" value="baket"
+                                id="baket" name="jenis_pekerjaan[]">
+
+                            <label class="form-check-label" for="baket">
+                                Baket
+                            </label>
+                        </div>
+
+                        <!-- FORM BAKET -->
+                        <div id="form-baket" class="row d-none mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Harga Sewa/Hari Baket</label>
+
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light text-muted">Rp</span>
+
+                                    <input type="number" class="form-control" name="harga_sewa_hari_baket"
+                                        placeholder="0">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Harga Sewa/Jam Baket</label>
+
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light text-muted">Rp</span>
+
+                                    <input type="number" class="form-control" name="harga_sewa_jam_baket"
+                                        placeholder="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BREKER -->
+                        <div class="form-check mb-2">
+                            <input class="form-check-input pekerjaan-checkbox" type="checkbox" value="breker"
+                                id="breker" name="jenis_pekerjaan[]">
+
+                            <label class="form-check-label" for="breker">
+                                Breker
+                            </label>
+                        </div>
+
+                        <!-- FORM BREKER -->
+                        <div id="form-breker" class="row d-none mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Harga Sewa/Hari Breker</label>
+
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light text-muted">Rp</span>
+
+                                    <input type="number" class="form-control" name="harga_sewa_hari_breker"
+                                        placeholder="0">
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Harga Sewa/Jam Breker</label>
+
+                                <div class="input-group">
+                                    <span class="input-group-text bg-light text-muted">Rp</span>
+
+                                    <input type="number" class="form-control" name="harga_sewa_jam_breker"
+                                        placeholder="0">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="mb-3">
@@ -72,3 +119,33 @@
         </div>
     </div>
 </div>
+
+<script>
+    const baketCheckbox = document.getElementById('baket');
+    const brekerCheckbox = document.getElementById('breker');
+
+    const formBaket = document.getElementById('form-baket');
+    const formBreker = document.getElementById('form-breker');
+
+    // Toggle BAKET
+    baketCheckbox.addEventListener('change', function() {
+
+        if (this.checked) {
+            formBaket.classList.remove('d-none');
+        } else {
+            formBaket.classList.add('d-none');
+        }
+
+    });
+
+    // Toggle BREKER
+    brekerCheckbox.addEventListener('change', function() {
+
+        if (this.checked) {
+            formBreker.classList.remove('d-none');
+        } else {
+            formBreker.classList.add('d-none');
+        }
+
+    });
+</script>

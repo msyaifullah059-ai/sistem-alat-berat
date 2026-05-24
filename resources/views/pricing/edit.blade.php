@@ -22,29 +22,88 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="edit_jenis_pekerjaan" class="form-label">Jenis Pekerjaan</label>
-                        <select class="form-select" id="edit_jenis_pekerjaan" name="jenis_pekerjaan" required>
-                            <option value="">-- Pilih Jenis --</option>
-                            <option value="baket">Baket</option>
-                            <option value="breker">Breker</option>
-                        </select>
-                    </div>
+                        <label class="form-label">Jenis Pekerjaan</label>
 
-                    <div class="mb-3">
-                        <label for="edit_harga_per_hari" class="form-label">Harga Sewa/Hari</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light text-muted">Rp</span>
-                            <input type="number" class="form-control" id="edit_harga_per_hari" name="harga_per_hari"
-                                required />
+                        <div class="form-check">
+                            <input class="form-check-input jenis-edit-checkbox" type="checkbox" value="baket"
+                                id="edit_baket" name="jenis_pekerjaan[]">
+
+                            <label class="form-check-label" for="edit_baket">
+                                Baket
+                            </label>
                         </div>
-                    </div>
 
-                    <div class="mb-3">
-                        <label for="edit_harga_per_jam" class="form-label">Harga Sewa/Hari</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light text-muted">Rp</span>
-                            <input type="number" class="form-control" id="edit_harga_per_jam" name="harga_per_jam"
-                                required />
+                        <div id="edit_baket_form" class="mt-2 d-none">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        Harga Baket/Hari
+                                    </label>
+
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+
+                                        <input type="number" class="form-control" id="edit_harga_sewa_hari_baket"
+                                            name="harga_sewa_hari_baket">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        Harga Baket/Jam
+                                    </label>
+
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+
+                                        <input type="number" class="form-control" id="edit_harga_sewa_jam_baket"
+                                            name="harga_sewa_jam_baket">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="form-check mt-3">
+                            <input class="form-check-input jenis-edit-checkbox" type="checkbox" value="breker"
+                                id="edit_breker" name="jenis_pekerjaan[]">
+
+                            <label class="form-check-label" for="edit_breker">
+                                Breker
+                            </label>
+                        </div>
+
+                        <div id="edit_breker_form" class="mt-2 d-none">
+                            <div class="row">
+
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        Harga Breker/Hari
+                                    </label>
+
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+
+                                        <input type="number" class="form-control" id="edit_harga_sewa_hari_breker"
+                                            name="harga_sewa_hari_breker">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">
+                                        Harga Breker/Jam
+                                    </label>
+
+                                    <div class="input-group">
+                                        <span class="input-group-text">Rp</span>
+
+                                        <input type="number" class="form-control" id="edit_harga_sewa_jam_breker"
+                                            name="harga_sewa_jam_breker">
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
 

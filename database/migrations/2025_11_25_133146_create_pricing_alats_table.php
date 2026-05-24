@@ -13,15 +13,38 @@ return new class extends Migration
     {
         Schema::create('pricing_alats', function (Blueprint $table) {
             $table->uuid('id')->primary();
+
             $table->uuid('alat_berat_id');
-            $table->enum('jenis_pekerjaan', ['baket','breker'])->default('baket');
-            $table->integer('harga_per_hari')->nullable();
-            $table->integer('harga_per_jam')->nullable();
+
+            // JSON ARRAY
+            $table->json('jenis_pekerjaan');
+
+            // =========================
+            // BAKET
+            // =========================
+            $table->bigInteger('harga_sewa_hari_baket')->nullable();
+            $table->bigInteger('harga_sewa_jam_baket')->nullable();
+
+            // =========================
+            // BREKER
+            // =========================
+            $table->bigInteger('harga_sewa_hari_breker')->nullable();
+            $table->bigInteger('harga_sewa_jam_breker')->nullable();
+
+            // =========================
+            // TANGGAL
+            // =========================
             $table->date('berlaku_mulai');
+
             $table->date('berlaku_selesai')->nullable();
+
             $table->timestamps();
 
-            $table->foreign('alat_berat_id')->references('id')->on('alat_berats')->onDelete('cascade');
+            // FOREIGN KEY
+            $table->foreign('alat_berat_id')
+                ->references('id')
+                ->on('alat_berats')
+                ->onDelete('cascade');
         });
     }
 

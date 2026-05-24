@@ -203,13 +203,30 @@
 
                                 <h6 class="fw-bold text-primary mb-3">
                                     @forelse ($tool->pricing as $price)
-                                        <li class="mb-1">
-                                            <span class="me-2">{{ ucwords($price->jenis_pekerjaan) }}</span>
-                                            - Rp {{ number_format($price->harga_per_jam, 0, ',', '.') }} /
-                                            jam
-                                        </li>
+                                        @php
+                                            $jenis = $price->jenis_pekerjaan ?? [];
+                                        @endphp
+
+                                        @if (in_array('baket', $jenis))
+                                            <li class="mb-1">
+                                                Baket -
+                                                Rp {{ number_format($price->harga_sewa_jam_baket ?? 0, 0, ',', '.') }}
+                                                / Jam
+                                            </li>
+                                        @endif
+
+                                        @if (in_array('breker', $jenis))
+                                            <li class="mb-1">
+                                                Breker -
+                                                Rp {{ number_format($price->harga_sewa_jam_breker ?? 0, 0, ',', '.') }}
+                                                / Jam
+                                            </li>
+                                        @endif
+
                                     @empty
-                                        <li class="text-danger small">Harga belum tersedia</li>
+                                        <li class="text-danger small">
+                                            Harga belum tersedia
+                                        </li>
                                     @endforelse
                                 </h6>
 

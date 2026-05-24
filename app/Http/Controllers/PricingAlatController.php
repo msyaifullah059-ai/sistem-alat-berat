@@ -44,14 +44,26 @@ class PricingAlatController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'alat_berat_id'    => 'required|exists:alat_berats,id',
-            'jenis_pekerjaan'  => 'required|in:baket,breker',
-            'harga_per_hari'   => 'nullable|integer',
-            'harga_per_jam'    => 'nullable|integer',
-            'berlaku_mulai'    => 'required|date',
-            'berlaku_selesai'  => 'nullable|date|after_or_equal:berlaku_mulai',
+            'alat_berat_id' => 'required|exists:alat_berats,id',
+
+            // CHECKBOX ARRAY
+            'jenis_pekerjaan'   => 'required|array',
+            'jenis_pekerjaan.*' => 'in:baket,breker',
+
+            // BAKET
+            'harga_sewa_hari_baket' => 'nullable|integer',
+            'harga_sewa_jam_baket'  => 'nullable|integer',
+
+            // BREKER
+            'harga_sewa_hari_breker' => 'nullable|integer',
+            'harga_sewa_jam_breker'  => 'nullable|integer',
+
+            'berlaku_mulai'   => 'required|date',
+            'berlaku_selesai' => 'nullable|date|after_or_equal:berlaku_mulai',
         ]);
 
+        // SIMPAN JSON ARRAY
+        $validated['jenis_pekerjaan'] = $request->jenis_pekerjaan;
         PricingAlat::create($validated);
 
         return response()->json([
@@ -66,28 +78,40 @@ class PricingAlatController extends Controller
     public function edit($id)
     {
         $pricing = PricingAlat::findOrFail($id);
-        
-        // PERBAIKAN: Format JSON yang benar untuk kirim beberapa data sekaligus
+
         return response()->json([
             'pricing' => $pricing
-        ]); 
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+/**
+ * Update the specified resource in storage.
+ */
     public function update(Request $request, $id)
     {
         $pricing = PricingAlat::findOrFail($id);
 
         $validated = $request->validate([
-            'alat_berat_id'    => 'required|exists:alat_berats,id',
-            'jenis_pekerjaan'  => 'required|in:baket,breker',
-            'harga_per_hari'   => 'nullable|integer',
-            'harga_per_jam'    => 'nullable|integer',
-            'berlaku_mulai'    => 'required|date',
-            'berlaku_selesai'  => 'nullable|date|after_or_equal:berlaku_mulai',
+            'alat_berat_id' => 'required|exists:alat_berats,id',
+
+            // CHECKBOX ARRAY
+            'jenis_pekerjaan'   => 'required|array',
+            'jenis_pekerjaan.*' => 'in:baket,breker',
+
+            // BAKET
+            'harga_sewa_hari_baket' => 'nullable|integer',
+            'harga_sewa_jam_baket'  => 'nullable|integer',
+
+            // BREKER
+            'harga_sewa_hari_breker' => 'nullable|integer',
+            'harga_sewa_jam_breker'  => 'nullable|integer',
+
+            'berlaku_mulai'   => 'required|date',
+            'berlaku_selesai' => 'nullable|date|after_or_equal:berlaku_mulai',
         ]);
+
+        // SIMPAN ARRAY KE JSON
+        $validated['jenis_pekerjaan'] = $request->jenis_pekerjaan;
 
         $pricing->update($validated);
 
