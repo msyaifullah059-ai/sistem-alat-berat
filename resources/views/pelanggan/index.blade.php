@@ -22,6 +22,16 @@
                             Tambah Data
                         </button>
                     </div>
+                    <div class="modal fade" id="modalGambar" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content bg-transparent border-0">
+                                <div class="modal-body text-center">
+                                    <img src="" id="imgPreviewGede" class="img-fluid rounded shadow"
+                                        style="max-height: 80vh;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="table-responsive">
                         <table id="dataPelanggan" class="table mb-3">
                             <thead>
@@ -29,6 +39,8 @@
                                     <th>Nama</th>
                                     <th>Kontak</th>
                                     <th>Alamat</th>
+                                    <th>Tanggal Lahir</th>
+                                    <th>KTP</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -72,12 +84,48 @@
                         name: 'alamat'
                     },
                     {
+                        data: 'tanggal_lahir',
+                        name: 'tanggal_lahir',
+                        render: function(data) {
+                            if (!data) return '-';
+                            let d = new Date(data);
+                            return d.toLocaleDateString('id-ID'); // Hasil: 19/3/2026
+                        }
+                    },
+                    {
+                        data: 'ktp',
+                        name: 'ktp'
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false
                     }
                 ]
+            });
+            // 2. Preview Gambar Modal Create
+            $('#ktp').change(function() {
+                const file = this.files[0];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function(event) {
+                        $('#previewGambar').attr('src', event.target.result).fadeIn();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // 3. Preview Gambar Modal Edit
+            $(document).on('change', '#edit_gambar', function() {
+                const file = this.files[0];
+                if (file) {
+                    let reader = new FileReader();
+                    reader.onload = function(event) {
+                        $('#edit_previewGambar').attr('src', event.target.result).fadeIn();
+                    };
+                    reader.readAsDataURL(file);
+                }
             });
         });
 
@@ -91,6 +139,14 @@
                 $('#edit_nama').val(data.pelanggan.nama);
                 $('#edit_no_hp').val(data.pelanggan.no_hp);
                 $('#edit_alamat').val(data.pelanggan.alamat);
+                $('#edit_tanggal_lahir').val(data.pelanggan.tanggal_lahir);
+
+                // Tampilkan Gambar Lama jika ada
+                if (data.pelanggan.ktp) {
+                    $('#edit_previewGambar').attr('src', '/storage/' + data.pelanggan.ktp).show();
+                } else {
+                    $('#edit_previewGambar').hide();
+                }
 
                 // Munculkan Modal
                 $('#editModal').modal('show');
@@ -102,6 +158,13 @@
         // FUNGSI DELETE: Panggil fungsi global di admin.blade.php
         function deletePelanggan(id) {
             globalDelete(id, "/pelanggan/" + id, "Pelanggan");
+        }
+
+        function showGambar(url) {
+            // Tembak URL gambar ke modal
+            $('#imgPreviewGede').attr('src', url);
+            // Munculin modalnya
+            $('#modalGambar').modal('show');
         }
     </script>
 @endsection

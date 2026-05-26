@@ -23,6 +23,19 @@
                         <label class="form-label">Alamat</label>
                         <input type="text" class="form-control" name="alamat" id="edit_alamat" required>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tanggal Lahir</label>
+                        <input type="date" class="form-control" name="tanggal_lahir" id="edit_tanggal_lahir"
+                            required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">KTP</label>
+                        <input type="file" class="form-control" name="ktp" id="edit_ktp">
+                        <div class="mt-2">
+                            <p class="small text-muted">Gambar saat ini:</p>
+                            <img id="edit_previewGambar" src="" style="max-width:100px; border-radius:6px;">
+                        </div>
+                    </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>

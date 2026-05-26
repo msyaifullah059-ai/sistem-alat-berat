@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('operators', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('nama');
-            $table->string('no_hp')->nullable();
-            $table->text('alamat')->nullable();
+            $table->string('no_hp');
+            $table->text('alamat');
+            $table->date('tanggal_lahir');
             $table->string('ktp')->nullable();
             $table->timestamps();
         });

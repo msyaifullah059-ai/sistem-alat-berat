@@ -27,6 +27,10 @@
                         <input type="text" class="form-control" name="alamat" id="edit_alamat" required>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">Tanggal Lahir</label>
+                        <input type="date" class="form-control" name="tanggal_lahir" id="edit_tanggal_lahir" required>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">KTP</label>
                         <input type="file" class="form-control" name="ktp" id="edit_ktp">
                         <div class="mt-2">

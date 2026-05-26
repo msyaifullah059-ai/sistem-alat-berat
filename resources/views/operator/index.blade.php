@@ -39,6 +39,7 @@
                                     <th>Nama</th>
                                     <th>Kontak</th>
                                     <th>Alamat</th>
+                                    <th>Tanggal Lahir</th>
                                     <th>KTP</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -81,6 +82,15 @@
                     {
                         data: 'alamat',
                         name: 'alamat'
+                    },
+                    {
+                        data: 'tanggal_lahir',
+                        name: 'tanggal_lahir',
+                        render: function(data) {
+                            if (!data) return '-';
+                            let d = new Date(data);
+                            return d.toLocaleDateString('id-ID'); // Hasil: 19/3/2026
+                        }
                     },
                     {
                         data: 'ktp',
@@ -130,6 +140,7 @@
                 $('#edit_nama').val(data.operator.nama);
                 $('#edit_no_hp').val(data.operator.no_hp);
                 $('#edit_alamat').val(data.operator.alamat);
+                $('#edit_tanggal_lahir').val(data.operator.tanggal_lahir);
 
                 // Tampilkan Gambar Lama jika ada
                 if (data.operator.ktp) {

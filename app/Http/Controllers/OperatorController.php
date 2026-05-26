@@ -67,9 +67,10 @@ class OperatorController extends Controller
     {
         $validated = $request->validate([
             'nama'   => 'required|string|max:255',
-            'no_hp'  => 'nullable|string|max:20',
-            'alamat' => 'nullable|string',
-            'ktp'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'no_hp'  => 'required|string|max:20',
+            'alamat' => 'required|string',
+            'tanggal_lahir' => 'required|date',
+            'ktp'    => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
         if ($request->hasFile('ktp')) {
@@ -104,8 +105,9 @@ class OperatorController extends Controller
 
         $validated = $request->validate([
             'nama'   => 'required|string|max:255',
-            'no_hp'  => 'nullable|string|max:20',
-            'alamat' => 'nullable|string',
+            'no_hp'  => 'required|string|max:20',
+            'alamat' => 'required|string',
+            'tanggal_lahir' => 'required|date',
             'ktp'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 

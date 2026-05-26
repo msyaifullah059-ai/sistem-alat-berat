@@ -13,8 +13,11 @@ class Pelanggan extends Model
     protected $table = 'pelanggans';
     public $incrementing = false;
     protected $keyType = 'string';
+    protected $casts = [
+        'tanggal_lahir' => 'date:Y-m-d',
+    ];
 
-    protected $fillable = ['nama', 'no_hp', 'alamat'];
+    protected $fillable = ['nama', 'no_hp', 'alamat', 'tanggal_lahir', 'ktp'];
 
     protected static function boot()
     {

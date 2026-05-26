@@ -30,6 +30,20 @@
                         <input type="text" class="form-control" id="alamat" name="alamat" placeholder="Alamat"
                             required />
                     </div>
+                    <div class="mb-3">
+                        <label for="tanggal_lahir" class="form-label">Tanggal Lahir</label>
+                        <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="ktp">KTP</label>
+
+                        <input class="form-control" type="file" id="ktp" name="ktp" accept="image/*" />
+
+                        <div class="mt-2">
+                            <img id="previewGambar" src="" alt="Preview"
+                                style="max-width:120px; display:none; border-radius:6px;">
+                        </div>
+                    </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal">
                             Close

@@ -13,8 +13,11 @@ class Operator extends Model
     protected $table = 'operators';
     public $incrementing = false;
     protected $keyType = 'string';
+    protected $casts = [
+        'tanggal_lahir' => 'date:Y-m-d',
+    ];
 
-    protected $fillable = ['nama', 'no_hp', 'alamat','ktp'];
+    protected $fillable = ['nama', 'no_hp', 'alamat','tanggal_lahir', 'ktp'];
 
     protected static function boot()
     {

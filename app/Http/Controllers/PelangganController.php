@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Storage;
 use App\Models\Pelanggan;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -27,13 +28,23 @@ class PelangganController extends Controller
             </button>';
                     return $btn;
                 })
+                ->editColumn('ktp', function($row){
+                    if ($row->ktp) {
+                        $url = asset('storage/' . $row->ktp);
+                        // Tambahin onclick buat panggil fungsi JS
+                        return '<img src="'.$url.'" class="rounded shadow-sm" width="50" height="50" 
+                                style="object-fit: cover; cursor: pointer;" 
+                                onclick="showGambar(\''.$url.'\')">';
+                    }
+                    return '<small class="text-muted">No Image</small>';
+                })
                 // ---------------------------------------
                 // ->editColumn('status', function($row){
                 //     $class = $row->status == 'good' ? 'bg-success' : ($row->status == 'maintenance' ? 'bg-warning' : 'bg-danger');
                 //     return '<span class="badge '.$class.'">'.ucfirst($row->status).'</span>';
                 // })
                 // JANGAN LUPA: Tambahkan 'gambar' di dalam array rawColumns
-                ->rawColumns(['action']) 
+                ->rawColumns(['action', 'ktp']) 
                 ->make(true);
         }
 
@@ -55,9 +66,15 @@ class PelangganController extends Controller
     {
         $validated = $request->validate([
             'nama'   => 'required|string|max:255',
-            'no_hp' => 'nullable|string|max:20',
-            'alamat' => 'nullable|string',
+            'no_hp' => 'required|string|max:20',
+            'tanggal_lahir' => 'required|date',
+            'alamat' => 'required|string',
+            'ktp'    => 'required|image|mimes:jpg,jpeg,png|max:2048'
         ]);
+
+        if ($request->hasFile('ktp')) {
+            $validated['ktp'] = $request->file('ktp')->store('pelanggan', 'public');
+        }
 
         Pelanggan::create($validated);
 
@@ -87,9 +104,18 @@ class PelangganController extends Controller
 
         $validated = $request->validate([
             'nama'   => 'required|string|max:255',
-            'no_hp' => 'nullable|string|max:20',
-            'alamat' => 'nullable|string',
+            'no_hp' => 'required|string|max:20',
+            'alamat' => 'required|string',
+            'tanggal_lahir' => 'required|date',
+            'ktp'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
+
+        if ($request->hasFile('ktp')) {
+            // Opsi: Hapus gambar lama kalau mau hemat storage
+            if($pelanggan->ktp) Storage::disk('public')->delete($pelanggan->ktp);
+            
+            $validated['ktp'] = $request->file('ktp')->store('pelanggan', 'public');
+        }
 
         $pelanggan->update($validated);
 
@@ -105,6 +131,11 @@ class PelangganController extends Controller
     public function destroy($id)
     {
         $pelanggan = Pelanggan::findOrFail($id);
+
+        if ($pelanggan->ktp) {
+            Storage::disk('public')->delete($pelanggan->ktp);
+        }
+
         $pelanggan->delete();
 
         return response()->json([
