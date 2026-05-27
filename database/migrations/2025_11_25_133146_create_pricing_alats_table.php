@@ -22,13 +22,13 @@ return new class extends Migration
             // =========================
             // BAKET
             // =========================
-            $table->bigInteger('harga_sewa_hari_baket')->nullable();
+            // $table->bigInteger('harga_sewa_hari_baket')->nullable();
             $table->bigInteger('harga_sewa_jam_baket')->nullable();
 
             // =========================
             // BREKER
             // =========================
-            $table->bigInteger('harga_sewa_hari_breker')->nullable();
+            // $table->bigInteger('harga_sewa_hari_breker')->nullable();
             $table->bigInteger('harga_sewa_jam_breker')->nullable();
 
             // =========================

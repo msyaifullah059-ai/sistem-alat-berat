@@ -51,11 +51,11 @@ class PricingAlatController extends Controller
             'jenis_pekerjaan.*' => 'in:baket,breker',
 
             // BAKET
-            'harga_sewa_hari_baket' => 'nullable|integer',
+            // 'harga_sewa_hari_baket' => 'nullable|integer',
             'harga_sewa_jam_baket'  => 'nullable|integer',
 
             // BREKER
-            'harga_sewa_hari_breker' => 'nullable|integer',
+            // 'harga_sewa_hari_breker' => 'nullable|integer',
             'harga_sewa_jam_breker'  => 'nullable|integer',
 
             'berlaku_mulai'   => 'required|date',
@@ -99,11 +99,11 @@ class PricingAlatController extends Controller
             'jenis_pekerjaan.*' => 'in:baket,breker',
 
             // BAKET
-            'harga_sewa_hari_baket' => 'nullable|integer',
+            // 'harga_sewa_hari_baket' => 'nullable|integer',
             'harga_sewa_jam_baket'  => 'nullable|integer',
 
             // BREKER
-            'harga_sewa_hari_breker' => 'nullable|integer',
+            // 'harga_sewa_hari_breker' => 'nullable|integer',
             'harga_sewa_jam_breker'  => 'nullable|integer',
 
             'berlaku_mulai'   => 'required|date',

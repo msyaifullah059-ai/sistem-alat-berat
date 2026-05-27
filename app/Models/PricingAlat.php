@@ -23,11 +23,11 @@ class PricingAlat extends Model
         'jenis_pekerjaan',
 
         // BAKET
-        'harga_sewa_hari_baket',
+        // 'harga_sewa_hari_baket',
         'harga_sewa_jam_baket',
 
         // BREKER
-        'harga_sewa_hari_breker',
+        // 'harga_sewa_hari_breker',
         'harga_sewa_jam_breker',
 
         'berlaku_mulai',

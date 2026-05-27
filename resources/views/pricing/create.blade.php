@@ -38,7 +38,7 @@
 
                         <!-- FORM BAKET -->
                         <div id="form-baket" class="row d-none mb-3">
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <label class="form-label">Harga Sewa/Hari Baket</label>
 
                                 <div class="input-group">
@@ -47,7 +47,7 @@
                                     <input type="number" class="form-control" name="harga_sewa_hari_baket"
                                         placeholder="0">
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-6">
                                 <label class="form-label">Harga Sewa/Jam Baket</label>
@@ -73,7 +73,7 @@
 
                         <!-- FORM BREKER -->
                         <div id="form-breker" class="row d-none mb-3">
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <label class="form-label">Harga Sewa/Hari Breker</label>
 
                                 <div class="input-group">
@@ -82,7 +82,7 @@
                                     <input type="number" class="form-control" name="harga_sewa_hari_breker"
                                         placeholder="0">
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <div class="col-md-6">
                                 <label class="form-label">Harga Sewa/Jam Breker</label>

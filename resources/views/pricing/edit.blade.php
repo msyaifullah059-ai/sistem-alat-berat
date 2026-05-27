@@ -36,7 +36,7 @@
                         <div id="edit_baket_form" class="mt-2 d-none">
                             <div class="row">
 
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-6">
                                     <label class="form-label">
                                         Harga Baket/Hari
                                     </label>
@@ -47,7 +47,7 @@
                                         <input type="number" class="form-control" id="edit_harga_sewa_hari_baket"
                                             name="harga_sewa_hari_baket">
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-6">
                                     <label class="form-label">
@@ -77,7 +77,7 @@
                         <div id="edit_breker_form" class="mt-2 d-none">
                             <div class="row">
 
-                                <div class="col-md-6">
+                                {{-- <div class="col-md-6">
                                     <label class="form-label">
                                         Harga Breker/Hari
                                     </label>
@@ -88,7 +88,7 @@
                                         <input type="number" class="form-control" id="edit_harga_sewa_hari_breker"
                                             name="harga_sewa_hari_breker">
                                     </div>
-                                </div>
+                                </div> --}}
 
                                 <div class="col-md-6">
                                     <label class="form-label">

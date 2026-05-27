@@ -45,13 +45,9 @@
                                 <tr>
                                     <th>Alat Berat</th>
                                     <th>Jenis Pekerjaan</th>
-
                                     <th>Harga Baket</th>
                                     <th>Harga Breker</th>
-
-                                    <th>Berlaku Mulai</th>
-                                    <th>Berlaku Selesai</th>
-
+                                    <th>Masa Berlaku</th>
                                     <th width="120">Aksi</th>
                                 </tr>
                             </thead>
@@ -109,83 +105,46 @@
                             }).join(' - ');
                         }
                     },
+                    {
+                        data: 'harga_sewa_jam_baket',
+                        name: 'harga_sewa_jam_baket',
+                        render: function(data) {
+                            if (!data) return '-';
+
+                            return 'Rp ' + new Intl.NumberFormat('id-ID').format(data);
+                        }
+                    },
+                    {
+                        data: 'harga_sewa_jam_breker',
+                        name: 'harga_sewa_jam_breker',
+                        render: function(data) {
+                            if (!data) return '-';
+
+                            return 'Rp ' + new Intl.NumberFormat('id-ID').format(data);
+                        }
+                    },
 
                     {
                         data: null,
-                        name: 'harga_baket',
-
+                        name: 'periode',
                         render: function(data, type, row) {
 
-                            let hari = row.harga_sewa_hari_baket ?
-                                formatRupiah(row.harga_sewa_hari_baket) :
+                            if (!row.berlaku_mulai) return '-';
+
+                            let mulai = new Date(row.berlaku_mulai)
+                                .toLocaleDateString('id-ID');
+
+                            let selesai = row.berlaku_selesai ?
+                                new Date(row.berlaku_selesai)
+                                .toLocaleDateString('id-ID') :
                                 '-';
 
-                            let jam = row.harga_sewa_jam_baket ?
-                                formatRupiah(row.harga_sewa_jam_baket) :
-                                '-';
+                            return mulai + ' - ' + selesai;
 
-                            return `
-            ${hari} / Hari <br>
-            ${jam} / Jam
-        `;
+                            // atau:
+                            // return mulai + ' s/d ' + selesai;
                         }
                     },
-                    {
-                        data: null,
-                        name: 'harga_breker',
-
-                        render: function(data, type, row) {
-
-                            let hari = row.harga_sewa_hari_breker ?
-                                formatRupiah(row.harga_sewa_hari_breker) :
-                                '-';
-
-                            let jam = row.harga_sewa_jam_breker ?
-                                formatRupiah(row.harga_sewa_jam_breker) :
-                                '-';
-
-                            return `
-            ${hari} / Hari <br>
-            ${jam} / Jam
-        `;
-                        }
-                    },
-
-                    // ======================
-                    // TANGGAL
-                    // ======================
-
-                    {
-                        data: 'berlaku_mulai',
-                        name: 'berlaku_mulai',
-
-                        render: function(data) {
-
-                            if (!data) return '-';
-
-                            let d = new Date(data);
-
-                            return d.toLocaleDateString('id-ID');
-                        }
-                    },
-
-                    {
-                        data: 'berlaku_selesai',
-                        name: 'berlaku_selesai',
-
-                        render: function(data) {
-
-                            if (!data) return '-';
-
-                            let d = new Date(data);
-
-                            return d.toLocaleDateString('id-ID');
-                        }
-                    },
-
-                    // ======================
-                    // AKSI
-                    // ======================
 
                     {
                         data: 'action',
@@ -228,8 +187,8 @@
 
                     $('#edit_baket_form').removeClass('d-none');
 
-                    $('#edit_harga_sewa_hari_baket')
-                        .val(pricing.harga_sewa_hari_baket);
+                    // $('#edit_harga_sewa_hari_baket')
+                    //     .val(pricing.harga_sewa_hari_baket);
 
                     $('#edit_harga_sewa_jam_baket')
                         .val(pricing.harga_sewa_jam_baket);
@@ -242,8 +201,8 @@
 
                     $('#edit_breker_form').removeClass('d-none');
 
-                    $('#edit_harga_sewa_hari_breker')
-                        .val(pricing.harga_sewa_hari_breker);
+                    // $('#edit_harga_sewa_hari_breker')
+                    //     .val(pricing.harga_sewa_hari_breker);
 
                     $('#edit_harga_sewa_jam_breker')
                         .val(pricing.harga_sewa_jam_breker);
