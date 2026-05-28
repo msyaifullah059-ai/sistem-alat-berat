@@ -24,36 +24,15 @@ class TransaksiSewaController extends Controller
             $data = TransaksiSewa::with(['alat', 'operator', 'pelanggan'])
                     ->select('transaksi_sewas.*');
 
+            // Logic Filter Berdasarkan Status
+            if ($request->filled('status')) {
+                $data->where('transaksi_sewas.status', $request->status);
+            } else {
+                // Jika belum pilih status, tabel kosong
+                $data->where('transaksi_sewas.id', 0);
+            }
+
             return DataTables::of($data)
-                ->addColumn('operator_alat', function($row) {
-                    $operator = $row->operator->nama ?? 'N/A';
-                    $alat = $row->alat->nama_alat ?? 'N/A';
-                    return "<strong>$operator</strong><br><small class='text-muted'>$alat</small>";
-                })
-                ->addColumn('jenis_lokasi', function($row) {
-                    $jenis = $row->jenis_sewa ?? 'N/A';
-                    $lokasi = $row->lokasi_proyek ?? 'N/A';
-                    return "<strong>$jenis</strong><br><small class='text-muted'>$lokasi</small>";
-                })
-                ->addColumn('baket_breker', function($row) {
-                    $baket = $row->harga_sewa_baket ?? 'N/A';
-                    $breker = $row->harga_sewa_breker ?? 'N/A';
-                    return "Rp $baket - Rp $breker";
-                })
-                ->addColumn('periode_sewa', function($row) {
-
-                    $mulai = $row->tanggal_mulai
-                        ? \Carbon\Carbon::parse($row->tanggal_mulai)->format('d/m/Y')
-                        : '-';
-
-                    $selesai = $row->tanggal_selesai
-                        ? \Carbon\Carbon::parse($row->tanggal_selesai)->format('d/m/Y')
-                        : '-';
-
-                    return "
-                        $mulai - $selesai
-                    ";
-                })
                 ->addColumn('action', function($row){
                     $btn = '<button type="button" onclick="editTransaksi(\''.$row->id.'\')" class="btn btn-primary btn-icon btn-xs">
                                 <i class="mdi mdi-lead-pencil"></i>
@@ -71,7 +50,7 @@ class TransaksiSewaController extends Controller
                     $class = $val == 'berjalan' ? 'bg-warning' : ($val == 'selesai' ? 'bg-success' : 'bg-danger');
                     return '<span class="badge '.$class.'">'.ucfirst($val).'</span>';
                 })
-                ->rawColumns(['operator_alat', 'jenis_lokasi', 'baket_breker', 'periode_sewa', 'action', 'status']) 
+                ->rawColumns(['action', 'status']) 
                 ->make(true);
         }
 
