@@ -27,20 +27,12 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="tanggal" class="form-label">Tanggal Kerja</label>
-                        <input type="date" class="form-control" id="tanggal" name="tanggal" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="jumlah" class="form-label">Jumlah</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light text-muted">Rp</span>
-                            <input type="number" class="form-control" id="jumlah" name="jumlah" required />
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="keterangan" class="form-label">Keterangan</label>
-                        <input type="text" class="form-control" id="keterangan" name="keterangan"
-                            placeholder="Keterangan" required />
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" aria-label="Default select example" id="status" name="status">
+                            <option value="">Pilih Status</option>
+                            <option value="Belum Lunas">Belum Lunas</option>
+                            <option value="Lunas">Lunas</option>
+                        </select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal">

@@ -6,7 +6,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="dashboard">Dashboard</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Master</li>
+            <li class="breadcrumb-item active" aria-current="page">Data Pembayaran</li>
         </ol>
     </nav>
 
@@ -27,9 +27,8 @@
                             <thead>
                                 <tr>
                                     <th>Transkasi Sewa</th>
-                                    <th>Tanggal</th>
-                                    <th>Jumlah</th>
-                                    <th>Keterangan</th>
+                                    <th>Lokasi</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -59,16 +58,12 @@
                         name: 'pelanggan_alat'
                     },
                     {
-                        data: 'tanggal',
-                        name: 'tanggal'
+                        data: 'transaksi.lokasi_proyek',
+                        name: 'transaksi.lokasi_proyek'
                     },
                     {
-                        data: 'jumlah',
-                        name: 'jumlah',
-                    },
-                    {
-                        data: 'keterangan',
-                        name: 'keterangan'
+                        data: 'status',
+                        name: 'status'
                     },
                     {
                         data: 'action',
@@ -87,9 +82,7 @@
                 $('#formEdit').attr('action', '/dp_pembayaran/' + id);
 
                 $('#edit_transaksi_sewa_id').val(data.transaksi_sewa_id);
-                $('#edit_tanggal').val(data.tanggal);
-                $('#edit_jumlah').val(data.jumlah);
-                $('#edit_keterangan').val(data.keterangan);
+                $('#edit_status').val(data.status);
 
                 // Munculkan Modal
                 $('#editModal').modal('show');
@@ -100,7 +93,12 @@
 
         // FUNGSI DELETE: Panggil fungsi global di admin.blade.php
         function deletedp_pembayaran(id) {
-            globalDelete(id, "/dp/" + id, "Dp Pembayaran");
+            globalDelete(id, "/dp_pembayaran/" + id, "Dp Pembayaran");
+        }
+
+        function detaildp_pembayaran(id) {
+            window.location.href =
+                "{{ url('dp_pembayaran') }}/" + id + "/detail_dp_pembayaran";
         }
     </script>
 @endsection

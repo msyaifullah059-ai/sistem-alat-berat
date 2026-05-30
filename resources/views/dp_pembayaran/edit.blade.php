@@ -25,20 +25,11 @@
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_tanggal" class="form-label">Tanggal</label>
-                        <input type="date" class="form-control" id="edit_tanggal" name="tanggal" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_jumlah" class="form-label">Jumlah</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light text-muted">Rp</span>
-                            <input type="number" class="form-control" id="edit_jumlah" name="jumlah" required />
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_keterangan" class="form-label">Keterangan</label>
-                        <input type="text" class="form-control" id="edit_keterangan" name="keterangan"
-                            placeholder="Keterangan" required />
+                        <label class="form-label">Status</label>
+                        <select class="form-select" name="status" id="edit_status">
+                            <option value="Belum Lunas">Belum Lunas</option>
+                            <option value="Lunas">Lunas</option>
+                        </select>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal">

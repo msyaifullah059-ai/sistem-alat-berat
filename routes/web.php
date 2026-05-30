@@ -13,6 +13,7 @@ use App\Http\Controllers\PricingAlatController;
 use App\Http\Controllers\TransaksiSewaController;
 use App\Http\Controllers\TimesheetController;
 use App\Http\Controllers\DpPembayaranController;
+use App\Http\Controllers\DetailDpPembayaranController;
 use App\Http\Controllers\HmLogController;
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ServiceController;
@@ -164,6 +165,10 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::resource('dp_pembayaran', DpPembayaranController::class);
+    Route::resource(
+    'dp_pembayaran.detail_dp_pembayaran',
+    DetailDpPembayaranController::class
+);
 
     /*
     |--------------------------------------------------------------------------

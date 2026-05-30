@@ -14,15 +14,9 @@ class DpPembayaran extends Model
     public $incrementing = false;
     protected $keyType = 'string';
 
-    protected $casts = [
-        'tanggal' => 'date:Y-m-d',
-    ];
-
     protected $fillable = [
         'transaksi_sewa_id',
-        'tanggal',
-        'jumlah',
-        'keterangan'
+        'status'
     ];
 
     protected static function boot()
@@ -34,5 +28,13 @@ class DpPembayaran extends Model
     public function transaksi()
     {
         return $this->belongsTo(TransaksiSewa::class, 'transaksi_sewa_id');
+    }
+
+    public function detailPembayaran()
+    {
+        return $this->hasMany(
+            DetailDpPembayaran::class,
+            'dp_pembayaran_id'
+        );
     }
 }

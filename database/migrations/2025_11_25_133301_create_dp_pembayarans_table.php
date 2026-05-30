@@ -14,9 +14,7 @@ return new class extends Migration
         Schema::create('dp_pembayarans', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('transaksi_sewa_id');
-            $table->date('tanggal');
-            $table->integer('jumlah');
-            $table->string('keterangan')->nullable();
+            $table->enum('status', ['Belum Lunas','Lunas'])->default('Belum Lunas');
             $table->timestamps();
 
             $table->foreign('transaksi_sewa_id')->references('id')->on('transaksi_sewas')->onDelete('cascade');

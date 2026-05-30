@@ -6,7 +6,7 @@ use App\Models\Operator;
 use App\Models\AlatBerat;
 use Illuminate\Http\Request;
 use App\Models\TransaksiSewa;
-use App\Models\DpPembayaran;
+use App\Models\DetailDpPembayaran;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -31,7 +31,7 @@ class DashboardController extends Controller
     ->get();
 
         // TOTAL PENDAPATAN
-        $totalPendapatan = DpPembayaran::sum('jumlah');
+        $totalPendapatan = DetailDpPembayaran::sum('jumlah');
 
         $totalStatusAlat = $alatReady + $alatDisewa + $alatMaintenance;
 

@@ -18,44 +18,44 @@
             </li>
             <li class="nav-item nav-category">Master</li>
             <li class="nav-item">
-                <a href="alat" class="nav-link">
+                <a href="{{ route('alat.index') }}" class="nav-link">
                     <i class="link-icon" data-lucide="truck"></i>
                     <span class="link-title">Alat</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="operator" class="nav-link">
+                <a href="{{ route('operator.index') }}" class="nav-link">
                     <i class="link-icon" data-lucide="user-check"></i>
                     <span class="link-title">Operator</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="pelanggan" class="nav-link">
+                <a href="{{ route('pelanggan.index') }}" class="nav-link">
                     <i class="link-icon" data-lucide="users"></i>
                     <span class="link-title">Pelanggan</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="pricing" class="nav-link">
+                <a href="{{ route('pricing.index') }}" class="nav-link">
                     <i class="link-icon" data-lucide="tag"></i>
                     <span class="link-title">Harga Sewa</span>
                 </a>
             </li>
             <li class="nav-item nav-category">Transaksi</li>
             <li class="nav-item">
-                <a href="transaksi" class="nav-link">
+                <a href="{{ route('transaksi.index') }}" class="nav-link">
                     <i class="link-icon" data-lucide="credit-card"></i>
                     <span class="link-title">Penyewaan</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="dp_pembayaran" class="nav-link">
+                <a href="{{ route('dp_pembayaran.index') }}" class="nav-link">
                     <i class="link-icon" data-lucide="dollar-sign"></i>
                     <span class="link-title">Pembayaran</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="timesheet" class="nav-link">
+                <a href="{{ route('timesheet.index') }}" class="nav-link">
                     <i class="link-icon" data-lucide="list"></i>
                     <span class="link-title">Timesheet</span>
                 </a>
@@ -68,19 +68,19 @@
             </li> --}}
             <li class="nav-item nav-category">Manajemen</li>
             <li class="nav-item">
-                <a href="service" class="nav-link">
+                <a href="{{ route('service.index') }}" class="nav-link">
                     <i class="link-icon" data-lucide="clipboard"></i>
                     <span class="link-title">Layanan</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="about" class="nav-link">
+                <a href="{{ route('about.index') }}" class="nav-link">
                     <i class="link-icon" data-lucide="book-open"></i>
                     <span class="link-title">Tentang Kami</span>
                 </a>
             </li>
             <li class="nav-item">
-                <a href="users" class="nav-link">
+                <a href="{{ route('users.index') }}" class="nav-link">
                     <i class="link-icon" data-lucide="monitor"></i>
                     <span class="link-title">Manajemen User</span>
                 </a>
