@@ -12,6 +12,7 @@ use App\Http\Controllers\LokasiProyekController;
 use App\Http\Controllers\PricingAlatController;
 use App\Http\Controllers\TransaksiSewaController;
 use App\Http\Controllers\TimesheetController;
+use App\Http\Controllers\DetailTimesheetController;
 use App\Http\Controllers\DpPembayaranController;
 use App\Http\Controllers\DetailDpPembayaranController;
 use App\Http\Controllers\HmLogController;
@@ -154,9 +155,15 @@ Route::middleware('auth')->group(function () {
     */
 
     Route::resource('timesheet', TimesheetController::class);
+    Route::resource(
+    'timesheet.detail_timesheet',
+    DetailTimesheetController::class
+);
 
-    Route::get('/timesheet/{transaksi}/export', [TimesheetController::class, 'export'])
-        ->name('timesheet.export');
+    Route::get(
+    '/timesheet/export/{transaksi}',
+    [DetailTimesheetController::class, 'export']
+)->name('timesheet.detail.export');
 
     /*
     |--------------------------------------------------------------------------

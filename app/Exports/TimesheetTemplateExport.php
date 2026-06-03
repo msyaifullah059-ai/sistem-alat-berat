@@ -24,14 +24,12 @@ class TimesheetTemplateExport
 
         // Ambil data transaksi
         $t = TransaksiSewa::with([
-            'pelanggan',
-            'operator',
-            'timesheets',
-            'hmLogs',
-            'dpPembayaran' => function($q) {
-                $q->orderBy('tanggal', 'asc');
-            }
-        ])->findOrFail($transaksiId);
+    'pelanggan',
+    'operator',
+    'timesheets.details',
+    'hmLogs',
+    'dpPembayaran.detailPembayaran'
+])->findOrFail($transaksiId);
 
 
         $hargaBaket = $t->harga_sewa_baket ?? 0;
@@ -62,7 +60,18 @@ class TimesheetTemplateExport
         $sheet->setCellValue('G11', $tglMulai . ' - ' . $tglSelesai);
         $sheet->setCellValue('G12',  $t->jenis_sewa ?? '-');
         $sheet->setCellValue('D19', 'Operator ' . $t->operator->nama ?? '-');
-        $hmTerbaru = $t->timesheets?->sortByDesc('created_at')->first();    
+        $detailTerbaru = collect();
+
+foreach ($t->timesheets as $timesheet) {
+
+    $detailTerbaru = $detailTerbaru->merge(
+        $timesheet->details
+    );
+}
+
+$hmTerbaru = $detailTerbaru
+    ->sortByDesc('tanggal_pekerjaan')
+    ->first();   
         $sheet->setCellValue('G30', $hmTerbaru->hm_awal ?? '-');
         $sheet->setCellValue('G33', $hmTerbaru->hm_akhir ?? '-');
         $tglAwal = $hmTerbaru->tanggal_awal_hm ? Carbon::parse($hmTerbaru->tanggal_awal_hm)->format('d/m/Y') : '-';
@@ -182,11 +191,15 @@ class TimesheetTemplateExport
         // DP PEMBAYARAN (List DP)
         // =============================
 
-        $dpList = $t->dpPembayaran;
+        $dpList = $t->dpPembayaran
+    ? $t->dpPembayaran->detailPembayaran
+    : collect();
         $dpRow = 15;
         $templateDpRow = 15;
 
-        foreach ($dpList as $i => $dp) {
+        $no = 1;
+
+        foreach ($dpList as $dp) {
 
             if ($dpRow != $templateDpRow) {
 
@@ -203,14 +216,17 @@ class TimesheetTemplateExport
             // Nomor urut → AQ
             $sheet->setCellValueExplicit(
                 "AQ{$dpRow}",
-                (string) ($i + 1),
+                (string) $no,
                 DataType::TYPE_STRING
             );
 
             // Tanggal → AR
             $sheet->setCellValue(
                 "AR{$dpRow}",
-                date('d-m-Y', strtotime($dp->tanggal))
+                date(
+    'd-m-Y',
+    strtotime($dp->tanggal_bayar)
+)
             );
 
             // DP → AS–AT
@@ -229,15 +245,32 @@ class TimesheetTemplateExport
             );
 
             $dpRow++;
+            $no++;
         }
 
 
         // =============================
         // GROUP TIMESHEET PER BULAN
         // =============================
-        $grouped = $t->timesheets->groupBy(function ($ts) {
-            return date('Y-m', strtotime($ts->tanggal));
-        });
+        // $grouped = $t->timesheets->groupBy(function ($ts) {
+        //     return date('Y-m', strtotime($ts->tanggal));
+        // });
+
+        $allDetails = collect();
+
+foreach ($t->timesheets as $timesheet) {
+
+    $allDetails = $allDetails->merge(
+        $timesheet->details
+    );
+}
+
+$grouped = $allDetails->groupBy(function ($detail) {
+
+    return Carbon::parse(
+        $detail->tanggal_pekerjaan
+    )->format('Y-m');
+});
 
         $templateRow = 20;
         $currentRow  = 20;
@@ -325,7 +358,7 @@ $sheet->duplicateStyle(
         // Isi Jam Baket
         $totalJamBaket = 0;
         foreach ($items as $ts) {
-            $day = (int) date('j', strtotime($ts->tanggal));
+            $day = (int) date('j', strtotime($ts->tanggal_pekerjaan));
             if (isset($dateColumns[$day]) && $ts->jam_baket > 0) {
                 $totalJamBaket += (float)$ts->jam_baket;
                 $sheet->setCellValue("{$dateColumns[$day]}{$currentRow}", $ts->jam_baket);
@@ -366,7 +399,7 @@ $sheet->duplicateStyle(
         // Isi Jam Breker
         $totalJamBreker = 0;
         foreach ($items as $ts) {
-            $day = (int) date('j', strtotime($ts->tanggal));
+            $day = (int) date('j', strtotime($ts->tanggal_pekerjaan));
             if (isset($dateColumns[$day]) && $ts->jam_breker > 0) {
                 $totalJamBreker += (float)$ts->jam_breker;
                 $sheet->setCellValue("{$dateColumns[$day]}{$currentRow}", $ts->jam_breker);

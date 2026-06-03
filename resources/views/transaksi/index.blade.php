@@ -28,13 +28,10 @@
                                 <thead>
                                     <tr>
                                         <th>Pelanggan</th>
-                                        {{-- <th>Operator</th> --}}
                                         <th>Operator & Alat</th>
                                         <th>Jenis Sewa & Lokasi</th>
                                         <th>Harga Baket & Breker</th>
                                         <th>Periode Sewa</th>
-                                        {{-- <th>Tgl Mulai</th>
-                                        <th>Tgl Selesai</th> --}}
                                         <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -73,12 +70,6 @@
                         data: 'pelanggan.nama',
                         name: 'pelanggan.nama'
                     },
-
-                    // {
-                    //     data: 'operator.nama',
-                    //     name: 'operator.nama'
-                    // },
-
                     {
                         data: 'operator_alat',
                         name: 'operator_alat'

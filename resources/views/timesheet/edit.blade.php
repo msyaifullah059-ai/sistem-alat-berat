@@ -12,48 +12,29 @@
                     @method('PUT')
 
                     <div class="mb-3">
-                        <label class="form-label fw-bold">Transaksi Alat</label>
-                        <input type="text" class="form-control bg-light" id="edit_transaksi_display" readonly>
-                        <input type="hidden" id="edit_transaksi_sewa_id" name="transaksi_sewa_id">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="edit_tanggal_kerja" class="form-label">Tanggal Kerja</label>
-                        <input type="date" class="form-control" id="edit_tanggal_kerja" name="tanggal" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="edit_hm_awal" class="form-label">HM Awal</label>
-                        <input type="number" class="form-control" id="edit_hm_awal" name="hm_awal" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="edit_hm_akhit" class="form-label">HM Awal</label>
-                        <input type="number" class="form-control" id="edit_hm_akhir" name="hm_akhir" required />
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="edit_jam_baket" class="form-label">Jam Baket</label>
-                        <input type="number" class="form-control" id="edit_jam_baket" name="jam_baket" required />
+                        <label for="edit_transaksi_sewa_id" class="form-label">Transaksi Alat Berjalan</label>
+                        <select class="form-select" id="edit_transaksi_sewa_id" name="transaksi_sewa_id" required>
+                            <option value="">-- Pilih Transaksi --</option>
+                            @foreach ($transaksi as $row)
+                                {{-- Kita tampilin Nama Pelanggan & Nama Alat biar user gak bingung --}}
+                                <option value="{{ $row->id }}">
+                                    {{ $row->pelanggan->nama }} | {{ $row->alat->nama_alat }}
+                                    ({{ $row->lokasi_proyek }})
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="mb-3">
-                        <label for="edit_jam_breker" class="form-label">Jam Breker</label>
-                        <input type="number" class="form-control" id="edit_jam_breker" name="jam_breker" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_tanggal_awal_hm" class="form-label">Tanggal Awal HM</label>
-                        <input type="date" class="form-control" id="edit_tanggal_awal_hm" name="tanggal_awal_hm"
-                            required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit_tanggal_akhir_hm" class="form-label">Tanggal Akhir HM</label>
-                        <input type="date" class="form-control" id="edit_tanggal_akhir_hm" name="tanggal_akhir_hm"
-                            required />
+                        <label class="form-label">Status</label>
+                        <select class="form-select" name="status" id="edit_status">
+                            <option value="Berjalan">Berjalan</option>
+                            <option value="Selesai">Selesai</option>
+                        </select>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary btn-xs">Simpan Perubahan</button>
+                        <button type="submit" class="btn btn-primary btn-xs">Simpan</button>
                     </div>
                 </form>
             </div>

@@ -22,37 +22,37 @@ class DpPembayaranController extends Controller
                 })
                 ->addColumn('action', function($row){
 
-    return '
+                    return '
 
-        <button type="button"
-            onclick="detaildp_pembayaran(\''.$row->id.'\')"
-            class="btn btn-info btn-icon btn-xs text-white"
-            title="Detail">
+                        <button type="button"
+                            onclick="detaildp_pembayaran(\''.$row->id.'\')"
+                            class="btn btn-info btn-icon btn-xs text-white"
+                            title="Detail">
 
-            <i class="mdi mdi-eye"></i>
+                            <i class="mdi mdi-eye"></i>
 
-        </button>
+                        </button>
 
-        <button type="button"
-            onclick="editdp_pembayaran(\''.$row->id.'\')"
-            class="btn btn-primary btn-icon btn-xs"
-            title="Edit">
+                        <button type="button"
+                            onclick="editdp_pembayaran(\''.$row->id.'\')"
+                            class="btn btn-primary btn-icon btn-xs"
+                            title="Edit">
 
-            <i class="mdi mdi-lead-pencil"></i>
+                            <i class="mdi mdi-lead-pencil"></i>
 
-        </button>
+                        </button>
 
-        <button type="button"
-            onclick="deletedp_pembayaran(\''.$row->id.'\')"
-            class="btn btn-danger btn-icon btn-xs"
-            title="Delete">
+                        <button type="button"
+                            onclick="deletedp_pembayaran(\''.$row->id.'\')"
+                            class="btn btn-danger btn-icon btn-xs"
+                            title="Delete">
 
-            <i class="mdi mdi-delete"></i>
+                            <i class="mdi mdi-delete"></i>
 
-        </button>
+                        </button>
 
-    ';
-})
+                    ';
+                })
                 ->editColumn('status', function($row){
                     $val = $row->status;
                     $class = $val == 'Belum Lunas' ? 'bg-warning' : ($val == 'Lunas' ? 'bg-success' : 'bg-danger');
@@ -69,41 +69,15 @@ class DpPembayaranController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-
-            'dp_pembayaran_id' => 'required|exists:dp_pembayarans,id',
-
-            'tanggal_bayar' => 'required|date',
-
-            'jumlah' => 'required|integer|min:0',
-
-            'keterangan' => 'nullable|string',
-
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'transaksi_sewa_id' => 'required|exists:transaksi_sewas,id',
+            'status'    => 'required|in:Belum Lunas, Lunas'
         ]);
 
-        // UPLOAD FOTO
-        if ($request->hasFile('gambar')) {
-
-            $validated['gambar'] = $request
-                ->file('gambar')
-                ->store('detail_pembayaran', 'public');
-        }
-
-        DetailDpPembayaran::create($validated);
-
-        // TOTAL BARU
-        $total = DetailDpPembayaran::where(
-            'dp_pembayaran_id',
-            $validated['dp_pembayaran_id']
-        )->sum('jumlah');
+        DpPembayaran::create($validated);
 
         return response()->json([
-
             'success' => true,
-
-            'message' => 'Detail pembayaran berhasil ditambahkan!',
-
-            'total' => $total
+            'message' => 'Detail pembayaran berhasil ditambahkan!'
         ]);
     }
 
@@ -114,80 +88,28 @@ class DpPembayaranController extends Controller
 
     public function update(Request $request, $id)
     {
-        $detail = DetailDpPembayaran::findOrFail($id);
-
         $validated = $request->validate([
-
-            'tanggal_bayar' => 'required|date',
-
-            'jumlah' => 'required|integer|min:0',
-
-            'keterangan' => 'nullable|string',
-
-            'gambar' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
+            'transaksi_sewa_id' => 'required|exists:transaksi_sewas,id',
+            'status' => 'required|in:Belum Lunas,Lunas'
         ]);
 
-        // UPDATE FOTO
-        if ($request->hasFile('gambar')) {
+        $dpPembayaran = DpPembayaran::findOrFail($id);
 
-            if ($detail->gambar) {
-
-                Storage::disk('public')
-                    ->delete($detail->gambar);
-            }
-
-            $validated['gambar'] = $request
-                ->file('gambar')
-                ->store('detail_pembayaran', 'public');
-        }
-
-        $detail->update($validated);
-
-        // TOTAL BARU
-        $total = DetailDpPembayaran::where(
-            'dp_pembayaran_id',
-            $detail->dp_pembayaran_id
-        )->sum('jumlah');
+        $dpPembayaran->update($validated);
 
         return response()->json([
-
             'success' => true,
-
-            'message' => 'Detail pembayaran berhasil diupdate!',
-
-            'total' => $total
+            'message' => 'Data pembayaran berhasil diupdate!'
         ]);
     }
 
-    public function destroy($dp_pembayaran_id, $id)
+    public function destroy($id)
     {
-        $detail = DetailDpPembayaran::findOrFail($id);
-
-        // SIMPAN ID DULU
-        $dpId = $detail->dp_pembayaran_id;
-
-        // HAPUS FOTO
-        if ($detail->gambar) {
-
-            Storage::disk('public')
-                ->delete($detail->gambar);
-        }
-
-        $detail->delete();
-
-        // TOTAL BARU
-        $total = DetailDpPembayaran::where(
-            'dp_pembayaran_id',
-            $dpId
-        )->sum('jumlah');
+        DpPembayaran::findOrFail($id)->delete();
 
         return response()->json([
-
             'success' => true,
-
-            'message' => 'Detail pembayaran berhasil dihapus!',
-
-            'total' => $total
+            'message' => 'Data pembayaran berhasil dihapus!'
         ]);
     }
 }

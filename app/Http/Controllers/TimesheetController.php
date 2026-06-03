@@ -2,11 +2,6 @@
 
 namespace App\Http\Controllers;
 
-// Geng Export Excel
-use App\Exports\TimesheetTemplateExport;
-use App\Exports\TimesheetExport;
-use Maatwebsite\Excel\Facades\Excel;
-
 use App\Models\Timesheet;
 use App\Models\TransaksiSewa;
 use Illuminate\Http\Request;
@@ -18,30 +13,68 @@ class TimesheetController extends Controller
     {
         if ($request->ajax()) {
             $data = Timesheet::with(['transaksi.pelanggan', 'transaksi.alat'])
-                ->orderBy('tanggal', 'desc')
+                ->orderBy('created_at', 'desc')
                 ->get();
             
             return DataTables::of($data)
-                ->addColumn('action', function($row){
-                    $btn = '<button type="button" onclick="editTimesheet(\''.$row->id.'\')" class="btn btn-primary btn-icon btn-xs">
-                                <i class="mdi mdi-lead-pencil"></i>
-                            </button> ';
-                    
-                    // Tombol Export satuan (jika diperlukan per baris)
-                    $btn .= '<a href="'.route('timesheet.export', $row->transaksi_sewa_id).'" class="btn btn-success btn-icon btn-xs">
-                                <i class="mdi mdi-file-excel"></i>
-                            </a> ';
-
-                    $btn .= '<button type="button" onclick="deleteTimesheet(\''.$row->id.'\')" class="btn btn-danger btn-icon btn-xs">
-                                <i class="mdi mdi-delete"></i>
-                            </button>';
-                    return $btn;
+                ->addColumn('pelanggan_alat', function($row) {
+                    $pelanggan = $row->transaksi->pelanggan->nama ?? 'N/A';
+                    $alat = $row->transaksi->alat->nama_alat ?? 'N/A';
+                    return "<strong>$pelanggan</strong><br><small class='text-muted'>$alat</small>";
                 })
-                ->rawColumns(['action']) 
+                ->addColumn('sewa_lokasi', function($row) {
+                    $jenis_sewa = $row->transaksi->jenis_sewa ?? 'N/A';
+                    $lokasi = $row->transaksi->lokasi_proyek ?? 'N/A';
+                    return "<strong>$jenis_sewa</strong><br><small class='text-muted'>$lokasi</small>";
+                })
+                ->addColumn('periode_sewa', function($row) {
+
+                    $mulai = $row->transaksi->tanggal_mulai
+                        ? \Carbon\Carbon::parse($row->tanggal_mulai)->format('d/m/Y')
+                        : '-';
+
+                    $selesai = $row->transaksi->tanggal_selesai
+                        ? \Carbon\Carbon::parse($row->tanggal_selesai)->format('d/m/Y')
+                        : '-';
+
+                    return "
+                        $mulai - $selesai
+                    ";
+                })
+                ->addColumn('action', function($row){
+                    return '
+                        <button type="button"
+                            onclick="detailTimesheet(\''.$row->id.'\')"
+                            class="btn btn-info btn-icon btn-xs text-white"
+                            title="Detail">
+
+                            <i class="mdi mdi-eye"></i>
+
+                        </button>
+
+                        <button type="button" onclick="editTimesheet(\''.$row->id.'\')" class="btn btn-primary btn-icon btn-xs" title="Edit">
+                            <i class="mdi mdi-lead-pencil"></i>
+                        </button> 
+
+                        <button type="button" onclick="deleteTimesheet(\''.$row->id.'\')" class="btn btn-danger btn-icon btn-xs title="Delete"">
+                            <i class="mdi mdi-delete"></i>
+                        </button>
+                    ';
+                })
+                ->editColumn('status', function($row){
+                    $val = $row->status;
+
+                    $class = $val == 'Berjalan'
+                        ? 'bg-warning'
+                        : 'bg-success';
+
+                    return '<span class="badge '.$class.'">'.$val.'</span>';
+                })
+                ->rawColumns(['pelanggan_alat', 'sewa_lokasi', 'status', 'action'])
                 ->make(true);
         }
 
-        $transaksi = TransaksiSewa::with(['pelanggan', 'alat'])->where('status', 'berjalan')->get();
+        $transaksi = TransaksiSewa::with(['pelanggan', 'alat'])->orderBy('id', 'desc')->get();
         return view('timesheet.index', compact('transaksi'));
     }
 
@@ -49,68 +82,39 @@ class TimesheetController extends Controller
     {
         $validated = $request->validate([
             'transaksi_sewa_id' => 'required|exists:transaksi_sewas,id',
-            'tanggal'   => 'required|date',
-            'tanggal_awal_hm'   => 'required|date',
-            'tanggal_akhir_hm'  => 'required|date',
-            'jam_baket'         => 'nullable|integer|min:0',
-            'jam_breker'        => 'nullable|integer|min:0',
-            'hm_awal'           => 'required|integer|min:0',
-            'hm_akhir'          => 'required|integer|min:0'
+            'status'    => 'required|in:Berjalan,Selesai'
         ]);
-
-        $validated['jam_baket']  = $validated['jam_baket'] ?? 0;
-        $validated['jam_breker'] = $validated['jam_breker'] ?? 0;
 
         Timesheet::create($validated);
 
-        return response()->json(['success' => true, 'message' => 'Timesheet berhasil disimpan!']);
+        return response()->json([
+            'success' => true, 
+            'message' => 'Timesheet berhasil disimpan!']);
     }
 
     public function edit($id)
     {
-        // Kita panggil Timesheet dengan relasi transaksi, lalu di dalam transaksi ada pelanggan & alat
-        $timesheet = Timesheet::with(['transaksi.pelanggan', 'transaksi.alat'])->findOrFail($id);
-
-        return response()->json([
-            'timesheet' => $timesheet,
-            // Lu nggak butuh kirim jenis_pekerjaan terpisah, 
-            // karena udah nempel di dalam $timesheet->transaksi
-        ]);
+        return response()->json(Timesheet::findOrFail($id));
     }
 
     public function update(Request $request, $id)
     {
-        $timesheet = Timesheet::findOrFail($id);
-
         $validated = $request->validate([
             'transaksi_sewa_id' => 'required|exists:transaksi_sewas,id',
-            'tanggal'   => 'required|date',
-            'tanggal_awal_hm'   => 'required|date',
-            'tanggal_akhir_hm'  => 'required|date',
-            'jam_baket'         => 'nullable|integer|min:0',
-            'jam_breker'        => 'nullable|integer|min:0',
-            'hm_awal'           => 'required|integer|min:0',
-            'hm_akhir'          => 'required|integer|min:0'
+            'status' => 'required|in:Berjalan,Selesai'
         ]);
 
+        $timesheet = Timesheet::findOrFail($id);
         $timesheet->update($validated);
 
-        return response()->json(['success' => true, 'message' => 'Timesheet berhasil diupdate!']);
+        return response()->json([
+            'success' => true, 
+            'message' => 'Timesheet berhasil diupdate!']);
     }
 
     public function destroy($id)
     {
         Timesheet::findOrFail($id)->delete();
         return response()->json(['success' => true, 'message' => 'Data berhasil dihapus!']);
-    }
-
-    /**
-     * Fitur Export yang lu minta bro
-     */
-    public function export($transaksiId)
-    {
-        // Tetep pake logic lu yang lama
-        $export = new TimesheetTemplateExport();
-        return $export->export($transaksiId);
     }
 }

@@ -26,15 +26,10 @@
                         <table id="datatimesheet" class="table mb-3">
                             <thead>
                                 <tr>
-                                    <th>Alat Berat</th>
-                                    <th>Transaksi</th>
-                                    <th>Tanggal</th>
-                                    <th>Jam baket</th>
-                                    <th>Jam breker</th>
-                                    <th>HM Awal</th>
-                                    <th>HM Akhir</th>
-                                    <th>Tanggal Awal</th>
-                                    <th>Tanggal Akhir</th>
+                                    <th>Transaksi Sewa</th>
+                                    <th>Jenis Sewa & Lokasi</th>
+                                    <th>Periode Sewa</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -60,56 +55,20 @@
                 serverSide: true,
                 ajax: "{{ route('timesheet.index') }}",
                 columns: [{
-                        // FIX 2: Akses alat harus lewat transaksi
-                        data: 'transaksi.alat.nama_alat',
-                        name: 'transaksi.alat.nama_alat',
+                        data: 'pelanggan_alat',
+                        name: 'pelanggan_alat'
                     },
                     {
-                        data: 'transaksi.pelanggan.nama',
-                        name: 'transaksi.pelanggan.nama',
+                        data: 'sewa_lokasi',
+                        name: 'sewa_lokasi'
                     },
                     {
-                        data: 'tanggal',
-                        name: 'tanggal',
-                        render: function(data) {
-                            if (!data) return '-';
-                            let d = new Date(data);
-                            return d.toLocaleDateString('id-ID'); // Hasil: 19/3/2026
-                        }
+                        data: 'periode_sewa',
+                        name: 'periode_sewa'
                     },
                     {
-                        data: 'jam_baket',
-                        name: 'jam_baket'
-                    },
-                    {
-                        data: 'jam_breker',
-                        name: 'jam_breker'
-                    },
-                    {
-                        data: 'hm_awal',
-                        name: 'hm_awal'
-                    },
-                    {
-                        data: 'hm_akhir',
-                        name: 'hm_akhir'
-                    },
-                    {
-                        data: 'tanggal_awal_hm',
-                        name: 'tanggal_awal_hm',
-                        render: function(data) {
-                            if (!data) return '-';
-                            let d = new Date(data);
-                            return d.toLocaleDateString('id-ID'); // Hasil: 19/3/2026
-                        }
-                    },
-                    {
-                        data: 'tanggal_akhir_hm',
-                        name: 'tanggal_akhir_hm',
-                        render: function(data) {
-                            if (!data) return '-';
-                            let d = new Date(data);
-                            return d.toLocaleDateString('id-ID'); // Hasil: 19/3/2026
-                        }
+                        data: 'status',
+                        name: 'status'
                     },
                     {
                         data: 'action',
@@ -127,26 +86,8 @@
                 // Set Action URL Form Edit (pastiin route-nya bener)
                 $('#formEdit').attr('action', '/timesheet/' + id);
 
-                // Masukin data ke Inputan Modal Edit
-                let ts = data.timesheet;
-                let trans = ts.transaksi; // Ambil relasi transaksinya biar rapi
-
-                // Pakai ID yang sesuai dengan HTML lu: #edit_transaksi_display
-                let displayTeks = (trans?.pelanggan?.nama ?? '-') + ' | ' + (trans?.alat?.nama_alat ?? '-');
-                $('#edit_transaksi_display').val(displayTeks);
-
-                // Jangan lupa isi hidden inputnya supaya pas di-submit, 
-                // Controller tau data mana yang lagi di-update
-                $('#edit_transaksi_sewa_id').val(ts.transaksi_sewa_id);
-
-                // Data Utama
-                $('#edit_tanggal_kerja').val(ts.tanggal);
-                $('#edit_tanggal_awal_hm').val(ts.tanggal_awal_hm);
-                $('#edit_tanggal_akhir_hm').val(ts.tanggal_akhir_hm);
-                $('#edit_hm_awal').val(ts.hm_awal);
-                $('#edit_hm_akhir').val(ts.hm_akhir);
-                $('#edit_jam_baket').val(ts.jam_baket);
-                $('#edit_jam_breker').val(ts.jam_breker);
+                $('#edit_transaksi_sewa_id').val(data.transaksi_sewa_id);
+                $('#edit_status').val(data.status);
 
                 // Munculkan Modal
                 $('#editModal').modal('show');
@@ -158,6 +99,11 @@
         // FUNGSI DELETE: Panggil fungsi global di admin.blade.php
         function deleteTimesheet(id) {
             globalDelete(id, "/timesheet/" + id, "Timesheet");
+        }
+
+        function detailTimesheet(id) {
+            window.location.href =
+                "{{ url('timesheet') }}/" + id + "/detail_timesheet";
         }
     </script>
 @endsection

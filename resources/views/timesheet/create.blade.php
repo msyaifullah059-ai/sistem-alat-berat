@@ -18,86 +18,25 @@
                         <select class="form-select" id="transaksi_sewa_id" name="transaksi_sewa_id" required>
                             <option value="">-- Pilih Transaksi --</option>
                             @foreach ($transaksi as $row)
-                                @php
-                                    $pekerjaan = is_array($row->jenis_pekerjaan)
-                                        ? implode(',', $row->jenis_pekerjaan)
-                                        : $row->jenis_pekerjaan;
-                                @endphp
-                                <option value="{{ $row->id }}" data-pekerjaan="{{ strtolower($pekerjaan) }}">
+                                {{-- Kita tampilin Nama Pelanggan & Nama Alat biar user gak bingung --}}
+                                <option value="{{ $row->id }}">
                                     {{ $row->pelanggan->nama }} | {{ $row->alat->nama_alat }}
                                     ({{ $row->lokasi_proyek }})
                                 </option>
                             @endforeach
                         </select>
                     </div>
-
-                    <div id="detail-timesheet" style="display: none;">
-
-                        <div class="mb-3">
-                            <label for="tanggal" class="form-label">Tanggal Kerja</label>
-                            <input type="date" class="form-control" id="tanggal" name="tanggal" required />
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="hm_awal" class="form-label">HM Awal</label>
-                                    <input type="number" class="form-control" id="hm_awal" name="hm_awal"
-                                        placeholder="0" required />
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label for="hm_akhir" class="form-label">HM Akhir</label>
-                                    <input type="number" class="form-control" id="hm_akhir" name="hm_akhir"
-                                        placeholder="0" required />
-                                </div>
-                            </div>
-                        </div>
-
-                        <hr>
-                        <p class="text-muted small mb-3 text-italic">*Isi jam kerja sesuai jenis pekerjaan yang
-                            dilakukan
-                        </p>
-
-                        <div class="row">
-                            <div class="col-md-6" id="container_baket" style="display: none;">
-                                <div class="mb-3">
-                                    <label for="jam_baket" class="form-label">Jam Baket</label>
-                                    <div class="input-group">
-                                        <input type="number" step="0.1" class="form-control" id="jam_baket"
-                                            name="jam_baket" placeholder="0" />
-                                        <span class="input-group-text">Jam</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6" id="container_breker" style="display: none;">
-                                <div class="mb-3">
-                                    <label for="jam_breker" class="form-label">Jam Breker</label>
-                                    <div class="input-group">
-                                        <input type="number" step="0.1" class="form-control" id="jam_breker"
-                                            name="jam_breker" placeholder="0" />
-                                        <span class="input-group-text">Jam</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="tanggal_awal_hm" class="form-label">Tanggal Awal HM</label>
-                            <input type="date" class="form-control" id="tanggal_awal_hm" name="tanggal_awal_hm"
-                                required />
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="tanggal_akhir_hm" class="form-label">Tanggal Akhir HM</label>
-                            <input type="date" class="form-control" id="tanggal_akhir_hm" name="tanggal_akhir_hm"
-                                required />
-                        </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" aria-label="Default select example" id="status" name="status">
+                            <option value="">Pilih Status</option>
+                            <option value="Berjalan">Berjalan</option>
+                            <option value="Selesai">Selesai</option>
+                        </select>
                     </div>
 
                     <div class="modal-footer px-0 pb-0">
-                        <button type="button" class="btn btn-secondary btn-xs"
-                            data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary btn-xs" data-bs-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary btn-xs">Simpan</button>
                     </div>
                 </form>
@@ -106,7 +45,7 @@
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(document).ready(function() {
         // 1. Logic Toggle Kolom & Form Detail
@@ -153,4 +92,4 @@
             $('#detail-timesheet').hide();
         });
     });
-</script>
+</script> --}}
