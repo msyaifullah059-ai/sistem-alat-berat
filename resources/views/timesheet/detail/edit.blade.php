@@ -40,6 +40,34 @@
 
                         </div>
 
+                        {{-- TANGGAL PEKERJAAN --}}
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Tanggal Awal HM
+
+                            </label>
+
+                            <input type="date" id="edit_tanggal_awal_hm" name="tanggal_awal_hm"
+                                class="form-control" required>
+
+                        </div>
+
+                        {{-- TANGGAL PEKERJAAN --}}
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Tanggal Akhir HM
+
+                            </label>
+
+                            <input type="date" id="edit_tanggal_akhir_hm," name="tanggal_akhir_hm"
+                                class="form-control" required>
+
+                        </div>
+
                         {{-- JAM BAKET --}}
                         <div class="col-md-6 mb-3">
 

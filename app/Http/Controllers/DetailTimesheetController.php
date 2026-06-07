@@ -48,13 +48,24 @@ class DetailTimesheetController extends Controller
 
                 ->addIndexColumn()
 
-                ->editColumn(
-                    'tanggal_pekerjaan',
-                    function ($row) {
+                // ->editColumn(
+                //     'tanggal_pekerjaan',
+                //     function ($row) {
 
-                        return Carbon::parse($row->tanggal_pekerjaan);
-                    }
-                )
+                //         return Carbon::parse($row->tanggal_pekerjaan);
+                //     }
+                // )
+
+                ->addColumn('tanggal_pekerjaan', function($row) {
+
+                    $tanggal_kerja = $row->tanggal_pekerjaan
+                        ? \Carbon\Carbon::parse($row->tanggal_pekerjaan)->format('d/m/Y')
+                        : '-';
+
+                    return "
+                        $tanggal_kerja
+                    ";
+                })
 
                 ->addColumn('gambar', function ($row) {
 
@@ -130,6 +141,8 @@ class DetailTimesheetController extends Controller
             'timesheet_id' => 'required|exists:timesheets,id',
 
             'tanggal_pekerjaan' => 'required|date',
+            'tanggal_awal_hm' => 'required|date',
+            'tanggal_akhir_hm' => 'required|date',
 
             'jam_baket' => 'nullable|integer|min:0',
 
@@ -199,6 +212,8 @@ class DetailTimesheetController extends Controller
         $validated = $request->validate([
 
             'tanggal_pekerjaan' => 'required|date',
+            'tanggal_awal_hm' => 'required|date',
+            'tanggal_akhir_hm' => 'required|date',
 
             'jam_baket' => 'nullable|integer|min:0',
 

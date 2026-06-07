@@ -58,7 +58,8 @@ class TimesheetTemplateExport
 
         // Baru kita gabungin di cell G11
         $sheet->setCellValue('G11', $tglMulai . ' - ' . $tglSelesai);
-        $sheet->setCellValue('G12',  $t->jenis_sewa ?? '-');
+        $sheet->setCellValue('G12', $t->jenis_sewa . ' - ' . $t->lokasi_proyek);
+        // $sheet->setCellValue('G12',  $t->jenis_sewa ?? '-');
         $sheet->setCellValue('D19', 'Operator ' . $t->operator->nama ?? '-');
         $detailTerbaru = collect();
 

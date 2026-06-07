@@ -18,10 +18,13 @@ return new class extends Migration
             $table->uuid('timesheet_id');
 
             $table->date('tanggal_pekerjaan');
-
+            
             $table->integer('jam_baket')->default(0);
 
             $table->integer('hm_awal')->default(0);
+
+            $table->date('tanggal_awal_hm');
+            $table->date('tanggal_akhir_hm');
 
             $table->integer('hm_akhir')->default(0);
 

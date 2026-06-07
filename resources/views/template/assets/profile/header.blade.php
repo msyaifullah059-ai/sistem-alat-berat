@@ -1,3 +1,5 @@
+<link rel="shortcut icon" href="{{ asset('assets/favicon.png') }}" type="image/x-icon" />
+
 <link href="{{ 'https://fonts.googleapis.com/css?family=Work+Sans:400,500,700&display=swap' }}" rel="stylesheet" />
 <link href="{{ asset('assets/profile/fonts/icomoon/style.css') }}" rel="stylesheet" type="text/css">
 <link href="{{ asset('assets/profile/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">

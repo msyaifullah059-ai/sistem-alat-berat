@@ -6,8 +6,6 @@ use Barryvdh\DomPDF\Facade\Pdf; // Taruh di paling atas file
 use App\Models\Operator;
 use App\Models\AlatBerat;
 use App\Models\Pelanggan;
-use App\Models\PricingAlat;
-use App\Models\LokasiProyek;
 use Illuminate\Http\Request;
 use App\Models\TransaksiSewa;
 use Yajra\DataTables\Facades\DataTables;
@@ -55,16 +53,35 @@ class TransaksiSewaController extends Controller
                     ";
                 })
                 ->addColumn('action', function($row){
-                    $btn = '<button type="button" onclick="editTransaksi(\''.$row->id.'\')" class="btn btn-primary btn-icon btn-xs">
-                                <i class="mdi mdi-lead-pencil"></i>
-                            </button> ';
-                    $btn .= '<button type="button" onclick="detailTransaksi(\''.$row->id.'\')" class="btn btn-info btn-icon btn-xs text-white" title="Detail">
-                                <i class="mdi mdi-eye"></i>
-                            </button>';
-                    $btn .= '&nbsp;<button type="button" onclick="deleteTransaksi(\''.$row->id.'\')" class="btn btn-danger btn-icon btn-xs">
-                                <i class="mdi mdi-delete"></i>
-                            </button>';
-                    return $btn;
+                    return '
+                        <button type="button"
+                            onclick="detailTransaksi(\''.$row->id.'\')"
+                            class="btn btn-info btn-icon btn-xs text-white"
+                            title="Detail">
+
+                            <i class="mdi mdi-eye"></i>
+
+                        </button>
+
+                        <button type="button"
+                            onclick="editTransaksi(\''.$row->id.'\')"
+                            class="btn btn-primary btn-icon btn-xs"
+                            title="Edit">
+
+                            <i class="mdi mdi-lead-pencil"></i>
+
+                        </button>
+
+                        <button type="button"
+                            onclick="deleteTransaksi(\''.$row->id.'\')"
+                            class="btn btn-danger btn-icon btn-xs"
+                            title="Delete">
+
+                            <i class="mdi mdi-delete"></i>
+
+                        </button>
+                    ';
+                    
                 })
                 ->editColumn('status', function($row){
                     $val = strtolower($row->status);

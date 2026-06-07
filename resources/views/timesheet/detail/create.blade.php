@@ -54,6 +54,43 @@
 
                         </div>
 
+                        {{-- JAM BREKER --}}
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Jam Breker
+
+                            </label>
+
+                            <input type="number" name="jam_breker" class="form-control" min="0" value="0">
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Tanggal Awal HM
+
+                            </label>
+
+                            <input type="date" name="tanggal_awal_hm" class="form-control" required>
+
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+
+                            <label class="form-label">
+
+                                Tanggal Akhir HM
+
+                            </label>
+
+                            <input type="date" name="tanggal_akhir_hm" class="form-control" required>
+
+                        </div>
+
                         {{-- HM AWAL --}}
                         <div class="col-md-6 mb-3">
 
@@ -77,20 +114,6 @@
                             </label>
 
                             <input type="number" name="hm_akhir" class="form-control" min="0" required>
-
-                        </div>
-
-                        {{-- JAM BREKER --}}
-                        <div class="col-md-6 mb-3">
-
-                            <label class="form-label">
-
-                                Jam Breker
-
-                            </label>
-
-                            <input type="number" name="jam_breker" class="form-control" min="0" value="0">
-
                         </div>
 
                         {{-- GAMBAR --}}
@@ -115,7 +138,6 @@
                                     display:none;
                                     max-height:250px;
                                 ">
-
                         </div>
 
                     </div>

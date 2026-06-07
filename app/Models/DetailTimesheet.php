@@ -21,6 +21,8 @@ class DetailTimesheet extends Model
         'timesheet_id',
 
         'tanggal_pekerjaan',
+        'tanggal_awal_hm',
+        'tanggal_akhir_hm',
 
         'jam_baket',
 

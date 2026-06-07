@@ -85,7 +85,7 @@
                     {{-- INFO --}}
                     <div class="row mb-4">
 
-                        <div class="col-md-4 mb-2">
+                        <div class="col-md-3 mb-2">
 
                             <div class="border rounded p-3">
 
@@ -103,7 +103,7 @@
 
                         </div>
 
-                        <div class="col-md-4 mb-2">
+                        <div class="col-md-3 mb-2">
 
                             <div class="border rounded p-3">
 
@@ -125,7 +125,7 @@
 
                         </div>
 
-                        <div class="col-md-4 mb-2">
+                        <div class="col-md-3 mb-2">
 
                             <div class="border rounded p-3">
 
@@ -143,7 +143,7 @@
 
                         </div>
 
-                        <div class="col-md-4 mb-2">
+                        <div class="col-md-3 mb-2">
 
                             <div class="border rounded p-3">
 
@@ -268,9 +268,7 @@
                     },
                     {
                         data: 'gambar',
-                        name: 'gambar',
-                        orderable: false,
-                        searchable: false
+                        name: 'gambar'
                     },
                     {
                         data: 'action',
@@ -448,6 +446,12 @@
 
                     $('#edit_tanggal_pekerjaan')
                         .val(data.tanggal_pekerjaan);
+
+                    $('#edit_tanggal_awal_hm')
+                        .val(data.tanggal_awal_hm);
+
+                    $('#edit_tanggal_akhir_hm')
+                        .val(data.tanggal_akhir_hm);
 
                     $('#edit_jam_baket')
                         .val(data.jam_baket);

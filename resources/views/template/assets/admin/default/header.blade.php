@@ -7,4 +7,4 @@
 <link rel="stylesheet" href="{{ asset('assets/admin/vendors/flatpickr/flatpickr.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('assets/admin/vendors/mdi/css/materialdesignicons.min.css') }}" />
 <link rel="stylesheet" href="{{ asset('assets/admin/css/demo1/style.css') }}" />
-<link rel="shortcut icon" href="{{ asset('assets/admin/images/favicon.png') }}" type="image/x-icon" />
+<link rel="shortcut icon" href="{{ asset('assets/favicon.png') }}" type="image/x-icon" />
